@@ -36,7 +36,7 @@ const qrcode = require('qrcode')
 
  var key = speakeasy.generateSecret({
 
-    name: "helloworld"
+    name: "dnshfkjsdkj"
  }) 
 
  console.log(key);

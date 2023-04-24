@@ -1,21 +1,10 @@
-const mysql = require('mysql');
 const express = require('express');
 const app = express();
-const env = require('dotenv');
-env.config()
 const cors = require('cors');
 
 const bodyParser = require('body-parser');
 const userController = require('./UserController');
 
-// Create a MySQL connection pool
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE,
-})  
 app.use(cors());
  
 //API endpoints
@@ -30,7 +19,8 @@ app.get('/api/users', (req, res) => {
   userController.getUsers((err, results) => {
     if (err) throw err;
     res.setHeader('Content-Type', 'application/json');
-    res.send(results); res.send(JSON.stringify(results))
+  res.send(JSON.stringify(results));
+  
   });
 });
 
@@ -39,6 +29,7 @@ app.get('/api/users/:id', (req, res) => {
   const id = req.params.id;
   userController.getUserById(id, (err, results) => {
     if (err) throw err;
+    res.setHeader('Content-Type', 'application/json');
     
     res.send(JSON.stringify(results));
     console.log(results);
