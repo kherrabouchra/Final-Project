@@ -27,7 +27,7 @@ const getUsers = (callback) => {
 const getUserById = (id, callback) => {
   // Get user by id from database
   // ...
-  pool.query('SELECT * FROM user WHERE userID = ?', id, callback);
+  pool.query('SELECT * FROM user, developer WHERE userID = ? and developerID=userID' , id, callback);
 };
 
 const updateUser = (id, user, callback) => {

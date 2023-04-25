@@ -19,7 +19,7 @@ app.get('/api/users', (req, res) => {
   userController.getUsers((err, results) => {
     if (err) throw err;
     res.setHeader('Content-Type', 'application/json');
-  res.send(JSON.stringify(results));
+    res.send(results); res.send(JSON.stringify(results));
   
   });
 });
@@ -29,9 +29,7 @@ app.get('/api/users/:id', (req, res) => {
   const id = req.params.id;
   userController.getUserById(id, (err, results) => {
     if (err) throw err;
-    res.setHeader('Content-Type', 'application/json');
-    
-    res.send(JSON.stringify(results));
+    res.send(results);
     console.log(results);
   });
 });
@@ -54,6 +52,5 @@ app.delete('/api/myData/:id', (req, res) => {
 
 // Start the server
 app.listen(3000, () => {
-    
   console.log('Server listening on port 3000');
 });
