@@ -1,13 +1,13 @@
 // userController.js
- const connection = require('../services/DB')
+ const connection = require('../model/DB')
  const AppError = require('../utils/apperror')
 
 
  exports.createUser = (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password , type} = req.body;
   connection.query(
-    "INSERT INTO user (userID, username, email, password, country, city,secretKey,userType) VALUES (?, ?, ?,?,?,?,?,?)",
-    [name, email, password],
+    "INSERT INTO user (  username, email, password,  userType) VALUES (?, ?, ?,?,?,?,?,?)",
+    [name, email, password, type],
     function (err, data, fields) {
   if (!req.body) return next(new AppError("No form data found", 404));
  

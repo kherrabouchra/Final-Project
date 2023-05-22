@@ -15,9 +15,7 @@ app.use('/api', router);
 app.all("*", (req, res, next) => {
  next(new AppError(`The URL ${req.originalUrl} 
  does not exists`, 404));
-});
-// app.use('/users', require ('router/users.js'));
-
+}); 
 app.use(errorHandler);
  
 // Start the server
