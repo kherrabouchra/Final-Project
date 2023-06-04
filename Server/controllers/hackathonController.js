@@ -52,7 +52,7 @@ exports.createHackathonQuestion = (req, res) => {
     connection.query(stmt, [q], (err, data) => {
         if (err) return res.json({ Error: err });
         res.json({ 
-            Status: "Success",
+            status: "success",
             Message: "Hackathon question created successfully" });
     }) 
 }

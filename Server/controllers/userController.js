@@ -41,7 +41,7 @@ exports.getUserById =  (req, res) => {
    function (err, data, fields) {
      if (err) 
    return ( res.json({Error:"Not found"}));
-     res.status(201).json({
+     res.json({
        status: "success",
        data: data,
      });
@@ -58,7 +58,7 @@ exports.getDevById =  (req, res) => {
     return ( res.json({Error:"Not found"}));
   }
   connection.query(
-    'SELECT * FROM user, developer, leaderboard  WHERE userID = ? and developerID=userID and userID= developer',
+    'SELECT * FROM user, developer  WHERE userID = ? and developerID=userID  ',
     [req.params.id],
     function (err, data, fields) {
       if (err) 
@@ -70,6 +70,23 @@ exports.getDevById =  (req, res) => {
     }
   );
  }
+// exports.getDevById =  (req, res) => {
+//   if (!req.params.id) {
+//     return ( res.json({Error:"Not found"}));
+//   }
+//   connection.query(
+//     'SELECT * FROM user, developer, leaderboard  WHERE userID = ? and developerID=userID and userID= developer',
+//     [req.params.id],
+//     function (err, data, fields) {
+//       if (err) 
+//     return ( res.json({Error:"Not found"}));
+//       res.json({
+//         status: "success",
+//         data: data,
+//       });
+//     }
+//   );
+//  }
  
 
 ;

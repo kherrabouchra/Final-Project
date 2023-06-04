@@ -43,27 +43,27 @@ const createPath = (req, res) => {
 
 
 const getAllPaths = (req, res) => {
-    const stmt = 'SELECT * FROM learning_path';
+    const stmt = 'SELECT learningPathID, name, description FROM learning_path GROUP BY learningPathID, name, description';
 
     connection.query(stmt, (err, data) => {
-        if (err) return res.status(500).json({ status: err });
+        if (err) return res.json({ status: err });
 
-        res.status(200).json(data);
+        res.json({status: "success", data: data});
         console.log(data);
     })
 }
 
 const getPath = (req, res) => {
-    const stmt = 'SELECT * FROM learning_path WHERE id = ?';
+    const stmt = 'SELECT * FROM learning_path WHERE learningPathID = ?';
 
     const pathID = req.params.id;
 
     connection.query(stmt, pathID, (err, data) => {
-        if (err) return res.status(500).json({ status: err });
+        if (err) return res.json({ status: err });
 
-        if (data.length === 0) return res.status(400).json({ "message": "Path not found"});
+        if (data.length === 0) return res.json({ "message": "Path not found"});
 
-        res.json(data[0]);
+        res.json({status: "success", data :data[0]});
         console.log(data[0]);
     })
 }
@@ -110,12 +110,12 @@ const createCoursePath = (req, res) => {
 }
 
 const getAllCoursesPath = (req, res) => {
-    const stmt = 'SELECT gamified_course.courseID, gamified_course.Name, gamified_course.description, gamified_course.syllabus, gamified_course.content, gamified_course.duration, gamified_course.points, gamified_course.instructorID, gamified_course.quiz, learning_path.id FROM gamified_course, learning_path WHERE id = learning_path';
+    const stmt = 'SELECT learning_path.course, gamified_course.*  FROM learning_path ,gamified_course WHERE learningPathID = ? and course=courseID';
 
-    connection.query(stmt, (err, data) => {
-        if (err) return res.status(500).json({ status: err });
+    connection.query(stmt, [req.params.id] ,(err, data) => {
+        if (err) return res.json({ status: err });
 
-        res.status(200).json(data);
+        res.json({status:"success", data:data});
         console.log(data);
     })
 }
@@ -128,6 +128,18 @@ const getCoursePath = (req, res) => {
         if (err) return res.status(500).json({ status: err });
 
         if (data.length === 0) return res.status(400).json({ "message": `Course ${courseID} not found`});
+
+        res.json(data[0]);
+        console.log(data[0]);
+    })
+}
+
+const getQuizCount = (req, res) => {
+    const stmt = 'SELECT COUNT(quiz.id)  from quiz where lessonID in (select id from lesson where chapterID in (select id from chapter where courseID=?)) '
+    const pathID = req.params.id;
+
+    connection.query(stmt, pathID, (err, data) => {
+        if (err) return res.status(500).json({ status: err });
 
         res.json(data[0]);
         console.log(data[0]);
@@ -160,4 +172,4 @@ const getCoursePath = (req, res) => {
     })
 } */
 
-module.exports = { createPath, getAllPaths, getPath, updatePath, deletePath, createCoursePath, getAllCoursesPath, getCoursePath };
+module.exports = { createPath,getQuizCount, getAllPaths, getPath, updatePath, deletePath, createCoursePath, getAllCoursesPath, getCoursePath };
