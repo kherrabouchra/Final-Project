@@ -12,7 +12,6 @@ exports.getNotifications =  (req, res, next)  => {
        data: data,
        
      }); 
-    console.log(data);
    });
    };
    
@@ -28,25 +27,24 @@ exports.getNotifications =  (req, res, next)  => {
        data: data,
        
      }); 
-    console.log(data);
    });
    };
    exports.createNotification = (req, res, next) => {
     const q = 'INSERT INTO notifications SET ?';
     const values = {
-      recipientID: req.body.recipientID,
-      title: req.body.title,
+      recipientID: req.body.data.recipientID,
+      title: req.body.data.title,
+      content: req.body.id,
       date_time: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-      description: req.body.content,
+      description: req.body.data.content,
     };
-  
+   console.log(values);
     con.query(q, values, function (err, result) {
       if (err) {
         console.error(err);
         return res.status(500).json({ error: 'An error occurred while creating the notification.' });
       }
   
-      return res.status(200).json({ status: 'success', message: 'Notification created successfully.' });
+      return res.status(200).json({ status: 'success', message: 'Notification created successfully.', values });
     });
   };
-  

@@ -6,16 +6,13 @@ router.get('/', (req, res) => {
     req.session.destroy(function(err){
         if(err){
            console.log(err);
-        }else{
-            console.log(session);
-            req.end();
-            res.redirect('/');
         }
+    res.clearCookie('userID'); 
+        res.redirect('/') 
      });
-    res.clearCookie('token'); 
 
 
-    return res.json({Status: "Success"});
+    return res.json({Status: "Logout Success"});
 })
 module.exports = router;
 

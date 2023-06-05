@@ -43,7 +43,7 @@ const createPath = (req, res) => {
 
 
 const getAllPaths = (req, res) => {
-    const stmt = 'SELECT learningPathID, name, description FROM learning_path GROUP BY learningPathID, name, description';
+    const stmt = "SELECT learningPathID, name, description  FROM learning_path GROUP BY learningPathID, name, description";
 
     connection.query(stmt, (err, data) => {
         if (err) return res.json({ status: err });
@@ -53,6 +53,27 @@ const getAllPaths = (req, res) => {
     })
 }
 
+const getBadge = (req, res) => {
+    const s = "SELECT DISTINCT badge FROM learning_path WHERE learningPathID = ?";
+    connection.query(s, [req.params.id], (err, data) => {
+      if (err) {
+        return res.json({ status: err });
+      }
+  
+      const badge = data[0].badge; // Assuming there is only one distinct badge value returned
+  
+      const stmt = "SELECT color FROM badge WHERE badgeID = ? AND type = 'learning path'";
+      connection.query(stmt, [badge], (err, color) => {
+        if (err) {
+          return res.json({ status: err });
+        }
+  
+        res.json({ status: "success", data: color });
+        console.log(data);
+      });
+    });
+  };
+  
 const getPath = (req, res) => {
     const stmt = 'SELECT * FROM learning_path WHERE learningPathID = ?';
 
@@ -172,4 +193,4 @@ const getQuizCount = (req, res) => {
     })
 } */
 
-module.exports = { createPath,getQuizCount, getAllPaths, getPath, updatePath, deletePath, createCoursePath, getAllCoursesPath, getCoursePath };
+module.exports = { getBadge,createPath,getQuizCount, getAllPaths, getPath, updatePath, deletePath, createCoursePath, getAllCoursesPath, getCoursePath };

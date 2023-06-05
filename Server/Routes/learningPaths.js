@@ -8,7 +8,7 @@ router.get('/', PathController.getAllPaths);
 router.get('/:id', PathController.getPath);
 router.put('/:id', PathController.updatePath);
 router.delete('/:id', PathController.deletePath);
-
+router.get('/:id/badge', PathController.getBadge)
 router.post('/courses', PathController.createCoursePath); 
 router.get('/courses/:id', PathController.getAllCoursesPath);
 router.put('/courses/:id', CourseController.updateCourse);

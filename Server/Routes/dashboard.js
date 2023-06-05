@@ -5,20 +5,19 @@ const jwt = require('jsonwebtoken')
  
  
 const verifyUser = (req, res, next) => {
-    const token = req.cookies.token;
-    if(req.session.user){
-        console.log("user: ", req.session.user);
-    if(!token) {
-        return res.json({Error: "You are not Authenticated"});
-    } else {
-        jwt.verify(token, "jwt-secret-key", (err, decoded) => {
-            if(err) return res.json({Error: "Token wrong"});
-            req.role = decoded.role;
-            req.id = decoded.userID;
-            next();
-        } )
-    }}
-}
+    if (!req.session.user) {
+        return res.json({ Error: "You are not Authenticated" });
+    }
+
+    const role = req.session.user.role;
+    const id = req.session.user.userID;
+
+    req.role = role;
+    req.id = id;
+
+    next();
+};
+
 router.get('/',verifyUser, (req, res) => {
     return res.json({Status: "Success", role: req.role, id: req.userID, user:req.session.user})
 })

@@ -26,7 +26,7 @@ app.use(
           resave: false,
           saveUninitialized: true,
           cookie:{
-            expires:60*60*24*1000, sameSite:'strict'
+            expires:60*60*48*1000, 
           
           }
         })
@@ -45,7 +45,17 @@ app.use('/instructor', require('./Routes/instructor'));
 app.use('/notifications', require('./Routes/notification'));
 app.use('/claims', require('./Routes/claims'));
 app.use('/schedule', require('./Routes/schedule'));
-app.use('/logout',require('./Routes/logout') );
+app.get('/logout',(req, res) => {
+  req.session.destroy(function(err){
+      if(err){
+         console.log(err);
+      }
+      console.log("destroyed");
+      res.clearCookie('userID'); 
+      res.json({status:'success'})
+  });
+});
+
 
 app.listen(3000,()=>{
 

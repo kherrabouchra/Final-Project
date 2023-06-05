@@ -11,7 +11,7 @@ const createCourse = (req, res) => {
     /* res.status(201).json({ "message": "Course created successfully" }); */
 
     const courseID = data.insertId; // Get the course ID from the database after insertion
-    res.status(201).json({ courseID });
+    res.status(201).json({ status : 'success',  message: "Course created successfully", courseID  });
 
     console.log(newCourse);
   });
@@ -88,19 +88,18 @@ const deleteCourse = (req, res) => {
 
 const createChapter = (req, res) => {
   const stmt = "INSERT INTO chapters (courseID, chapterName) VALUES ?";
-
-  const { courseID, chapterNames } = req.body;
-
+console.log(req.body);
+  const courseID= req.body.courseID;
+   const chapterNames = req.body.chapterNames;
   const chaptersData = chapterNames.map((chapterName) => [
     courseID,
     chapterName,
   ]);
 
   connection.query(stmt, [chaptersData], (err, data) => {
-    if (err) return res.status(500).json({ status: err });
+    if (err) return res.json({ Error: err });
 
-    res.status(201).json({ message: "Chapter created successfully" });
-    console.log(data);
+    res.json({status:'success',  message: "Chapters created successfully" });
   });
 };
 
@@ -145,7 +144,6 @@ const createLesson = (req, res) => {
 
   connection.query(stmt, [lessonsData], (err, data) => {
     if (err) return res.status(500).json({ status: err });
-
     const lessonIDs = []; // Store the generated lessonIDs
 
     for (let i = 0; i < data.affectedRows; i++) {
