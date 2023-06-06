@@ -45,12 +45,14 @@ app.use('/instructor', require('./Routes/instructor'));
 app.use('/notifications', require('./Routes/notification'));
 app.use('/claims', require('./Routes/claims'));
 app.use('/schedule', require('./Routes/schedule'));
+app.use('/interview', require('./Routes/Interview'));
+app.use('/job', require('./Routes/job'));
+
 app.get('/logout',(req, res) => {
   req.session.destroy(function(err){
       if(err){
          console.log(err);
       }
-      console.log("destroyed");
       res.clearCookie('userID'); 
       res.json({status:'success'})
   });

@@ -18,6 +18,9 @@ router.post('/chapters/create', CourseController.createChapter);
 
 router.get('/lessons/getAll/:id', CourseController.getAllLessons);
 router.get('/lessons/get/:id', CourseController.getLesson);
+router.get('/lessons/getByCourse/:id', CourseController.getCourseLesson);
+
 router.post('/lessons/create', CourseController.createLesson);
 router.put('/lessons/update/:id', CourseController.updateLesson);
 module.exports = router;
+ 

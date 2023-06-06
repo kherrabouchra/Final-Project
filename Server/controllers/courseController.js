@@ -30,28 +30,18 @@ const createCourse = (req, res) => {
 //     console.log(data);
 //   });
 // };
-getAllCourses = (req, res) => {
-    const stmt = 'SELECT * FROM gamified_course ';
-
-    connection.query(stmt, (err, data) => {
-        if (err) return res.json({ status: err });
-
-        res.json({data: data ,status:'success'});
-        console.log(data);
-    })
-}
 
  
 const getAllCoursesByInst = (req, res) => {
     const stmt =
-      "SELECT gamified_course.*, COUNT(quiz.id) AS quizCount FROM gamified_course LEFT JOIN quiz ON gamified_course.courseID = quiz.id WHERE instructorID = ? GROUP BY gamified_course.courseID;";
+      "SELECT *  from gamified_course WHERE instructorID = ? ";
   
     const id = req.params.id;
   
     connection.query(stmt, id, (err, data) => {
-      if (err) return res.status(500).json({ status: err });
+      if (err) return res.json({ status: err });
   
-      res.status(200).json(data);
+      res.json({status:"success",data:data});
       console.log(data);
     });
   };
@@ -191,6 +181,34 @@ const getAllLessons = (req, res) => {
     console.log(data[0]);
   });
 };
+
+
+
+const getAllCoursesQuiz = (req, res) => {
+  const stmt =
+    "SELECT gamified_course.*, COUNT(quiz.id) AS quizCount FROM gamified_course LEFT JOIN quiz ON gamified_course.id = quiz.id ";
+
+  connection.query(stmt, (err, data) => {
+    if (err) return res.status(500).json({ status: err });
+
+    res.status(200).json(data);
+    console.log(data);
+  });
+};
+
+const getAllCourses = (req, res) => {
+    const stmt = 'SELECT * FROM gamified_course ';
+
+    connection.query(stmt, (err, data) => {
+        if (err) return res.json({ status: err });
+
+        res.json({data: data ,status:'success'});
+        console.log(data);
+    })
+}
+
+
+
 const getCourse = (req, res) => {
   const stmt = 'SELECT * FROM gamified_course where courseID =? ';
 
@@ -207,11 +225,27 @@ const getCourse = (req, res) => {
 }
 const getLesson = (req, res) => {
   const stmt =
-    "SELECT chapters.chapterName, lessons.*, quiz.id AS quizID, quiz.exercise, quiz.notebookURL,   quiz.option_a, quiz.option_b, quiz.option_c, quiz.option_d, quiz.correct_answer, quiz.lessonID FROM chapters LEFT JOIN lessons ON lessons.chapterID = chapters.id LEFT JOIN quiz ON lessons.id = quiz.lessonID WHERE lessons.id = ?";
-
+  "SELECT chapters.chapterName, lessons.*, quiz.id AS quizID, quiz.exercise, quiz.option_a, quiz.option_b, quiz.option_c, quiz.option_d, quiz.correct_answer, quiz.lessonID FROM chapters LEFT JOIN lessons ON lessons.chapterID = chapters.id LEFT JOIN quiz ON lessons.id = quiz.lessonID WHERE lessons.id = ?";
   const lessonID = req.params.id;
 
   connection.query(stmt, lessonID, (err, data) => {
+    if (err) return res.json({ status: err });
+
+    /* if (data.length === 0) return res.status(400).json({ "message": `Course ${id} not found`}); */
+
+    res.json({status:"success", data:data[0]});
+    console.log(data[0]);
+  });
+};
+
+
+const getCourseLesson = (req, res) => {
+  const stmt =
+    "SELECT chapters.chapterName, lessons.*, quiz.id AS quizID, quiz.exercise, quiz.option_a, quiz.option_b, quiz.option_c, quiz.option_d, quiz.correct_answer, quiz.lessonID FROM chapters LEFT JOIN lessons ON lessons.chapterID = chapters.id LEFT JOIN quiz ON lessons.id = quiz.lessonID WHERE chapters.courseID = ?";
+
+  const courseID  = req.params.id;
+
+  connection.query(stmt, courseID , (err, data) => {
     if (err) return res.status(500).json({ status: err });
 
     /* if (data.length === 0) return res.status(400).json({ "message": `Course ${id} not found`}); */
@@ -265,7 +299,7 @@ const updateQuiz = (req, res) => {
 module.exports = {
   createCourse, 
   getAllCoursesByInst,
-  getAllCourses,
+  getAllCourses, getCourseLesson,
   getCourse,
   updateCourse,
   deleteCourse,
