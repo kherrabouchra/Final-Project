@@ -29,6 +29,20 @@ exports.getNotifications =  (req, res, next)  => {
      }); 
    });
    };
+   exports.getNotificationsDev =  (req, res, next)  => {
+    if (!req.params.id) {
+        return ( res.json({Error:"Not found"}));
+      }
+    con.query('SELECT * FROM notifications where recipientID = ? ',[req.params.id], function (err, data, fields) { 
+      if (err) res.json({Error:err});
+     res.status(201).json({
+       status: "success",
+       length: data?.length,
+       data: data,
+       
+     }); 
+   });
+   };
    exports.createNotification = (req, res, next) => {
     const q = 'INSERT INTO notifications SET ?';
     const values = {

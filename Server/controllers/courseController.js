@@ -132,13 +132,14 @@ const getChapter = (req, res) => {
 
 const createLesson = (req, res) => {
   const stmt =
-    "INSERT INTO lessons (lessonName, points, videoUrl, notebookURL, chapterID) VALUES ?";
+    "INSERT INTO lessons (lessonName, points, videoUrl, notebookURL, csvUrl, chapterID) VALUES ?";
 
   const lessonsData = req.body.map((lesson) => [
     lesson.lessonName,
     lesson.points,
     lesson.videoUrl,
     lesson.notebookURL,
+    lesson.csvUrl,
     lesson.chapterID,
   ]);
 

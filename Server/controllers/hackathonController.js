@@ -8,6 +8,7 @@ exports.createHackathon = (req, res) => {
    
     const newHack = {     
         type: "hackathon",
+        creator:req.body.creator,
         name:req.body.name,
         description: req.body.description,
         background: req.body.background,
@@ -54,6 +55,26 @@ exports.createHackathonQuestion = (req, res) => {
         res.json({ 
             status: "success",
             Message: "Hackathon question created successfully" });
+    }) 
+}
+
+
+
+exports.register = (req, res) => {
+    const stmt = 'INSERT INTO challenge_registration  set ?';
+       console.log(req.body);
+      const developer= req.body.devID
+      const hackathon=req.params.id
+      const q={
+        developer, hackathon
+      }
+       
+    console.log(q);
+    connection.query(stmt, [q], (err, data) => {
+        if (err) return res.json({ Error: err });
+        res.json({ 
+            status: "success",
+            Message: "Registred  successfully" });
     }) 
 }
 
