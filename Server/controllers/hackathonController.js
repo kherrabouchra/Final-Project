@@ -78,6 +78,21 @@ exports.register = (req, res) => {
     }) 
 }
 
+exports.registerTeam = async (req, res) => {
+    try {
+        const hackathon = req.params.id;
+        const { developer } = req.body;
+    
+        // Call the stored procedure
+        const [rows] = await connection.promise().query('CALL add_developer_to_team(?, ?)', [developer, hackathon]);
+    
+        res.status(200).json({ message: 'Stored procedure executed successfully.' });
+      } catch (err) {
+        console.error('Error executing stored procedure:', err);
+        res.status(500).json({ status: err.message });
+      }
+}
+
 
 
 exports.getAllHackathons = (req, res) => {
