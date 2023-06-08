@@ -4,7 +4,7 @@ import NewHackathonForm from '../../components/Hackathon/inst'
 
 const Createhackathon = () => {
   return (
- <>
+ <>  <NavBarInst/>
      <NewHackathonForm/>
    </>
   )

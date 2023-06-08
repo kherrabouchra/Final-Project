@@ -65,6 +65,15 @@ const location = useLocation();
           navigate('/recdashboard',{state: user})
           }, 2000);
         } 
+        if(res.data.role === "analyst") {
+          if(!log){navigate('')}
+
+          setTimeout(() => {
+            
+          setLoading(false);
+          navigate('/analyst',{state: user})
+          }, 2000);
+        } 
           if(res.data.role === "instructor") {
             
                   setTimeout(() => {

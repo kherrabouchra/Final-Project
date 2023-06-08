@@ -21,7 +21,6 @@ const Container = styled.div`
   margin: 0 ;
   padding: 80px;
   margin-top:-70px;
-  
   box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
   
@@ -591,10 +590,10 @@ const CreateJobeOffer = () => {
       </Radio.Group>
     </Grid> 
     </Grid.Container>
-    <div style={{display:'flex',   alignItems:'center', justifyContent:"space-around"}}>
+    <div style={{display:'flex',   justifyContent:"flex-start", margin:' 0 24px'}}>
     <NumberInput  onChange={(value) => setData({...data, duration:  value})} 
-                 value={data.duration}  label="duration" />
-   <p>mins</p>   </div>
+                 value={data.duration}  label="Duration(mins)" />
+    </div>
      
      {error && <div className='errmsg'>{error}</div>}
     </Box>

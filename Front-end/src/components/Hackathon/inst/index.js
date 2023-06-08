@@ -155,7 +155,12 @@ const handledrop =(files)=>{
 
 
 const steps = ['0', '1', '2', '3'];
-export const Rte=({editorContent, setEditorContent})=>{
+
+
+const NewHackathonForm =()=>{ 
+  const [richTextValues, setRichTextValues] = useState([]);
+
+  const [editorContent, setEditorContent] = useState(`<p>Regular paragraph</p><pre><code>${codeExample}</code></pre>`,);
   const editor = useEditor({
     extensions: [
         Link,Image,
@@ -174,84 +179,14 @@ export const Rte=({editorContent, setEditorContent})=>{
      setEditorContent(editor.getHTML());  
    }, 
   });
-  return(
-    <RichTextEditor   
-    editor={editor}   controls={[
-   ['bold', 'italic', 'underline', 'link', 'Embed image'],
-   ['unorderedList', 'h1', 'h2', 'h3'],
-   ['sup', 'sub'],
-   ['alignLeft', 'alignCenter', 'alignRight'],
- ]}   onImageUpload={handleImageUpload}>
- <RichTextEditor.Toolbar>
- <RichTextEditor.ControlsGroup>
-     <RichTextEditor.Bold />
-     <RichTextEditor.Italic />
-     <RichTextEditor.Underline />
-     <RichTextEditor.Strikethrough />
-     <RichTextEditor.ClearFormatting />
-     <RichTextEditor.Highlight />
-     <RichTextEditor.Code /> 
-     {/* <RichTextEditor.CodeBlock />  */}
-     
-     
-   </RichTextEditor.ControlsGroup>
-
-   <RichTextEditor.ControlsGroup>
-     <RichTextEditor.H1 />
-     <RichTextEditor.H2 />
-     <RichTextEditor.H3 />
-     <RichTextEditor.H4 />
-   </RichTextEditor.ControlsGroup>
-
-   <RichTextEditor.ControlsGroup>
-     <RichTextEditor.Blockquote />
-     <RichTextEditor.Hr />
-     <RichTextEditor.BulletList />
-     <RichTextEditor.OrderedList />
-     <RichTextEditor.Subscript />
-     <RichTextEditor.Superscript />
-   </RichTextEditor.ControlsGroup>
-
-   <RichTextEditor.ControlsGroup>
-     <RichTextEditor.Link />
-     <RichTextEditor.Unlink />
-
-   </RichTextEditor.ControlsGroup>
-
-   <RichTextEditor.ControlsGroup>
-     <RichTextEditor.AlignLeft />
-     <RichTextEditor.AlignCenter />
-     <RichTextEditor.AlignJustify />
-     <RichTextEditor.AlignRight />
-   </RichTextEditor.ControlsGroup>
- </RichTextEditor.Toolbar>
-
- <RichTextEditor.Content />
-</RichTextEditor>)
-}
-
-const NewHackathonForm =()=>{  
-  
-  const [editorContents, setEditorContents] = useState([]);
-  useEffect(() => {
-    setEditorContents(questions.map(() => `<p>Regular paragraph</p><pre><code>${codeExample}</code></pre>`));
-  }, [questions]);
-  
-  const handleEditorChange = (index, value) => {
-    setEditorContents((prevContents) => {
-      const updatedContents = [...prevContents];
-      updatedContents[index] = value;
-      return updatedContents;
-    });
-  };
 
  const location= useLocation();
  
  const[user, setUser]=useState('');
  useEffect(()=>{
   setUser(location.state)
-  console.log(user);
  }, [])
+ console.log(user);
   
 useEffect(()=>{
   setData({...data, creator:user.userID})
@@ -289,7 +224,8 @@ const [auto, setAuto]= useState(false);
     return skipped.has(step);
   };
 
-  const handleNext = () => {
+  const handleNext = (e) => {
+    e.preventDefault();
     let newSkipped = skipped;
     if (isStepSkipped(activeStep)) {
       newSkipped = new Set(newSkipped.values());
@@ -299,8 +235,7 @@ const [auto, setAuto]= useState(false);
     setSkipped(newSkipped);
   };
 
-  const handleBack = () => { 
-
+  const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
@@ -343,18 +278,36 @@ const [auto, setAuto]= useState(false);
     level: checked
   });
  },[checked])
+
  
+
+
+
+
  const addQuestion = () => {
-  setQuestions((prev) => [...prev, { question:'', points:'', solution:'' } ] );
+  setQuestions([...questions, { points: 0, question: "", solution: "" }]);
+  setRichTextValues([...richTextValues, ""]);
 };
+const handleEditorChange = (index, value) => {
+  setRichTextValues((prev) =>
+    prev.map((v, idx) => (idx === index ? value : v))
+  );
+};
+const handleQuestionChange = (index, value) => {
+  const newQuestions = [...questions];
+  newQuestions[index].question = value;
+  setQuestions(newQuestions);
+};
+
+
 const handlePointsChange = (index, value) => {
   setQuestions((prev) =>
     prev.map((q, idx) => (idx === index ? { ...q, points: value } : q))
   );
 };
- 
+
  const checkFields =()=>{
-  const credentials = !data.name || !data.description ||!data.background || !data.evaluationCriteria || !data.level ||  !data.rules;
+  const credentials = !data.name || !data.description || !data.evaluationCriteria || !data.level ||  !data.rules;
   if (activeStep===0 & credentials) {
     setError("Please fill all the required fields");
     return false;
@@ -389,30 +342,7 @@ const handleImageUpload = (file)=>{
     .catch((err) => console.log(err));
 };
 
- const handleSubmit=()=>{
-  if(!checkFields()){return;}
-  handleScrollToTop();
-  handleNext();
-
-
-}
-
-  const handleQuestionChange = ( value) => {
-    setQuestions((prevState) => {
-      const updatedQuestions = [...prevState];
-      updatedQuestions[0].question = value;
-      return updatedQuestions;
-    });
-  };
-
-
-useEffect(()=>{
-
-handleQuestionChange( editorContents.toString() )
-console.log(questions); 
-
-}, [editorContents])
-
+ 
   const handleSolutionChange = (index, value) => {
     setQuestions((prevState) => {
       const updatedQuestions = [...prevState];
@@ -428,8 +358,19 @@ console.log(questions);
     });
   };
 
- const handleCreatehack =()=>{
 
+
+
+console.log(richTextValues);
+const handleSubmit=(e)=>{
+  if(!checkFields()){return;}
+  handleScrollToTop();
+  handleNext(e);
+
+
+}  
+ const handleCreatehack =(e)=>{
+e.preventDefault()
   api.post('/hackathons', data)
   .then(
     (result)=>{
@@ -437,18 +378,18 @@ console.log(questions);
       if(result.data.status==='success'){
         console.log(result.data.message);
 
-        questions.forEach((q) => {
-                                     
-          api.post('/hackathons/questions', {id:result.data.id, question: q.question,
-                  
-                    solution: q.solution,
-                    points: q.points})
-              .then((res)=>{console.log(res.data);
-                if(res.data.status==="success"){console.log(res.data.message);
-                setSuccess(true)}
-              }).catch((err)=>console.log(err))})
 
-               
+
+                api.post('/hackathons/questions',{ id: result.data.id, questions: questions})
+                .then((res)=>{  console.log(res.data);
+                  if (res.data.status ==="success"){
+                    setSuccess(true);
+
+                    console.log(res.data.Message);
+                    console.log(success);   
+
+                  }
+                }).catch((err)=>console.log(err))
       }
     })
 
@@ -459,9 +400,10 @@ console.log(questions);
  }
 
  const navigate=useNavigate()
-const finish=()=>{
+const finish=(e)=>{
+  e.preventDefault()
   setSuccess('');
-  navigate('/hackathons')
+  navigate('/hackathons', {state:user})
 }
  console.log(success);
  console.log(data, questions);
@@ -610,7 +552,7 @@ const finish=()=>{
         <h2 style={{ margin: '30px' }}>Instruction {index + 1}</h2>
         <Grid css={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <Input
-            bordered
+            bordered  
             label="Points"
             type="number"
             placeholder="0"
@@ -620,14 +562,68 @@ const finish=()=>{
     
         </Grid>
         <Grid>
-          <Rte     editorContent={editorContents}
-                setEditorContent={setEditorContents}
-                value={editorContents[index]}
-                onChange={(value) => handleEditorChange(index, value)}
-             />
+
           {/* <Input type='file' accept='.csv'/> */}
         </Grid>  
-        
+        <RichTextEditor style={{ margin: '30px 0' }}
+  editor={editor}
+  controls={[
+    ['bold', 'italic', 'underline', 'link', 'Embed image'],
+    ['unorderedList', 'h1', 'h2', 'h3'],
+    ['sup', 'sub'],
+    ['alignLeft', 'alignCenter', 'alignRight'],
+  ]}
+  onImageUpload={handleImageUpload}
+  value={richTextValues[index]}
+  onChange={(value) => handleEditorChange(index, value)
+  }
+> 
+      <RichTextEditor.Toolbar>
+      <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Underline />
+          <RichTextEditor.Strikethrough />
+          <RichTextEditor.ClearFormatting />
+          <RichTextEditor.Highlight />
+          <RichTextEditor.Code /> 
+          {/* <RichTextEditor.CodeBlock />  */}
+          
+          
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.H1 />
+          <RichTextEditor.H2 />
+          <RichTextEditor.H3 />
+          <RichTextEditor.H4 />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Blockquote />
+          <RichTextEditor.Hr />
+          <RichTextEditor.BulletList />
+          <RichTextEditor.OrderedList />
+          <RichTextEditor.Subscript />
+          <RichTextEditor.Superscript />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Link />
+          <RichTextEditor.Unlink />
+
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.AlignLeft />
+          <RichTextEditor.AlignCenter />
+          <RichTextEditor.AlignJustify />
+          <RichTextEditor.AlignRight />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+
+      <RichTextEditor.Content />
+    </RichTextEditor>
         {/* <TextField
           fullWidth
           label={`Instruction ${index + 1}`}
@@ -652,7 +648,7 @@ const finish=()=>{
              
              <>
         
-               <>
+               <>{!success &&<>
                  <Header>Grading options</Header>
                  <TextSub style={{ width: '70%', margin: '20px 100px' }}>
                    Define the criteria and scoring system for evaluating submissions. You can also include solutions regarding the auto-grading process.
@@ -660,7 +656,7 @@ const finish=()=>{
                  <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '20px' }}>
                    <P>Switch for auto grading</P>
                    <Switch onChange={() => setAuto(!auto)} />
-                 </div> 
+                 </div></> }
                  {!auto  && (
                    <>{!success &&
                      <p style={{ width: '80%', margin: '20px 10px', padding: '100px' }}>
@@ -691,7 +687,7 @@ const finish=()=>{
        
        <SubHeader>Hackathon created successfully !</SubHeader>
        <CheckBox></CheckBox>
-       <WhiteBtn onClick={finish}> <MdArrowBack/> Go back to hackathons</WhiteBtn>
+       <WhiteBtn onClick={(e)=>finish(e)}> <MdArrowBack/> Go back to hackathons</WhiteBtn>
        </div></> 
              )}
            </>
@@ -719,7 +715,7 @@ const finish=()=>{
         </WhiteBtn>
         <WhiteBtn>Preview</WhiteBtn>
         <Box sx={{ flex: '1 1 auto' }} />
-        <BlackBtn style={{ padding: '10px 16px' }} onClick={activeStep !== 3 ? handleSubmit : handleCreatehack}>
+        <BlackBtn style={{ padding: '10px 16px' }} onClick={activeStep !== 3 ? (e)=>handleSubmit(e) : (e)=>handleCreatehack(e)}>
           {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
         </BlackBtn>
       </>
