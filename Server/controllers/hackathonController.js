@@ -129,7 +129,21 @@ exports.registerTeam = async (req, res) => {
       }
 }
 
+exports.getRegistration = (req, res) => {
+    const stmt = 'SELECT * FROM challenge_registration WHERE developer = ? AND hackathon = ?'
 
+    const hackathon = req.params.hackId;
+    const developer = req.params.devId;
+
+    connection.query(stmt, [developer, hackathon], (err, data) => {
+        if (err) return res.status(500).json({ status: err });
+
+        res.status(200).json({data: data[0]});
+        console.log(data[0]);
+        console.log(hackathon)
+        console.log(developer)
+    })
+}
 
 exports.getAllHackathons = (req, res) => {
     const stmt = 'SELECT * FROM challenge, schedule where challenge.type="hackathon"  and challengeID=challenge ';
