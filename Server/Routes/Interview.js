@@ -7,6 +7,5 @@ const CreateJob = require ('../controllers/JobController.js')
 
 router.post('/saveinterview', CreateInterview.postInterview);
 router.get('/dev', CreateInterview.getDev);
-router.post('/Job' , CreateJob.postJob);
 
 module.exports= router;

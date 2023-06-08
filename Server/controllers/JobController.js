@@ -50,7 +50,7 @@ if (err) {
       if (err) 
        return res.json({ status: err });
   
-      res.json({ status:'success', message: 'Job created successfully' });
+      res.json({ status:'success', message: 'Job created successfully'  });
     });
   };
 
@@ -72,6 +72,21 @@ const getParticipants = (req, res) => {
 
 const getAllJobs= (req, res) => {
   const stmt =
+    'select * from job_offer ';
+ 
+  const jobData = req.params.id;
+ 
+
+  connection.query(stmt,[jobData], (err, data) => {
+    if (err) 
+     return res.json({ status: err });
+
+    res.json({ status:'success', message: 'Job  successfully' , data:data});
+  });
+};
+
+const getAllJobsbyid= (req, res) => {
+  const stmt =
     'select * from job_offer where recruiter= ? ';
  
   const jobData = req.params.id;
@@ -81,8 +96,9 @@ const getAllJobs= (req, res) => {
     if (err) 
      return res.json({ status: err });
 
-    res.json({ status:'success', message: 'Job created successfully' , data:data});
+    res.json({ status:'success', message: 'Job  successfully' , data:data});
   });
 };
 
-module.exports = { postJob , getAllJobs};
+
+module.exports = { postJob , getAllJobs, getAllJobsbyid};

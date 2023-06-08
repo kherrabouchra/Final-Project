@@ -24,6 +24,24 @@ exports.createHackathon = (req, res) => {
     })
 }
 
+exports.createChallenge = (req, res) => {
+    const stmt = 'INSERT INTO  challenge SET ?';
+   
+    const newHack = {     
+        type: "job challenge",
+        creator:req.body.creator,
+        name:req.body.name,
+        description: req.body.description, 
+        level: req.body.level, 
+        duration:req.body.duration, 
+        creationDate: dayjs(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+    } 
+    console.log(req.body);
+    connection.query(stmt, [newHack], (err, data) => {
+        if (err) return res.json({ Error: err });
+        res.json({ status: "success", message: "challenge created successfully", id: data.insertId});
+    })
+}
 // function htmlToJson(html) {
 //     if (typeof html !== 'string') {
 //         throw new Error('Input must be a string');
@@ -45,9 +63,9 @@ exports.createHackathonQuestion = (req, res) => {
     const stmt = 'INSERT INTO challenge_content    set ?';
      
       const q={  challenge:  req.body.id,
-        question:  req.body.questions[0].question,
-        solution: req.body.questions[0].solution,
-        points: req.body.questions[0].points
+        question:  req.body.question,
+        solution: req.body.solution,
+        points: req.body.points
        };
     console.log(q);
     connection.query(stmt, [q], (err, data) => {
@@ -58,6 +76,24 @@ exports.createHackathonQuestion = (req, res) => {
     }) 
 }
 
+exports.createChallengeQuestion = (req, res) => {
+    const stmt = 'INSERT INTO challenge_content    set ?';
+     
+      const q={  challenge:  req.body.id,
+        question:  req.body.question,
+        solution: req.body.solution,
+        choices: req.body.choices,
+
+        points: req.body.points
+       };
+    console.log(req.body);
+    connection.query(stmt, [q], (err, data) => {
+        if (err) return res.json({ Error: err });
+        res.json({ 
+            status: "success",
+            message: "challenge question created successfully" });
+    }) 
+}
 
 
 exports.register = (req, res) => {
@@ -85,11 +121,21 @@ exports.getAllHackathons = (req, res) => {
 
     connection.query(stmt, (err, data) => {
         if (err) return res.status(500).json({ status: err });
-        res.status(200).json({Status: "success",data: data});
+        res.status(200).json({status: "success",data: data});
         console.log(data);
     })
 }
 
+
+exports.getAll = (req, res) => {
+    const stmt = 'SELECT * FROM challenge where challenge.type="hackathon" ';
+
+    connection.query(stmt, (err, data) => {
+        if (err) return res.status(500).json({ status: err });
+        res.status(200).json({status: "success",data: data});
+        console.log(data);
+    })
+}
 exports.getHackathonsByInst = (req, res) => {
     const stmt = 'SELECT * FROM challenge where challenge.type="hackathon"   and creator=?';
     const id = req.params.id;
@@ -131,7 +177,7 @@ exports.updateHackathon = (req, res) => {
 }
 
 exports.deleteHackathon = (req, res) => {
-    const stmt = 'DELETE FROM challenge WHERE id = ?';
+    const stmt = 'DELETE FROM challenge WHERE challengeID = ?';
 
     const id = req.params.id;
 
@@ -140,7 +186,7 @@ exports.deleteHackathon = (req, res) => {
     connection.query(stmt, [id], (err, data) => {
         if (err) return res.status(500).json({ status: err });
 
-        res.status(200).json({ "message": `Course ${id} deleted successfully`});
+        res.json({ status:"success", message: `Hackathon ${id} deleted successfully`});
     })
 } 
 
@@ -175,6 +221,16 @@ exports.createSchedule = (req, res) => {
 
 exports.getSchedules=(req, res)=>{
     const st= ' select  * from schedule , challenge where startDate = ?  and challenge= challengeID' 
+    connection.query(st, [req.query.date],(err, result) => {
+        if (err) return res.json({ Error: err });
+        console.log( );
+        res.json({ status: "success" , data:result});
+      
+    })
+}
+
+exports.getAllSchedules=(req, res)=>{
+    const st= ' select startDate  from schedule ' 
     connection.query(st, [req.query.date],(err, result) => {
         if (err) return res.json({ Error: err });
         console.log( );
