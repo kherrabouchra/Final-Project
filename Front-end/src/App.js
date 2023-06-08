@@ -53,6 +53,7 @@ import RecruiterDashboard from './pages/Recruiter/RecruiterDashboard';
 import JobOfferManage from './pages/Recruiter/Joboffer';
 import CandidatesPage from './pages/Recruiter/Candidates';
 import Createjoboffer from './pages/Recruiter/CreateJobofferPage';
+import HackathonParticipation from './pages/Developer/HackathonParticipation';
 
 function App( ) {
   const [loginStatus, setLoginStatus]=useState('')
@@ -152,6 +153,7 @@ if (loading) {
         <Route path="/courses/new" element={<CreateCourse />} />
         <Route path="/dashboard/courses/lesson/:id" element={<PrtcptCourse />} />
         <Route path="/Compete/hackathon/:id" element={<HackathonDetails />} />
+        <Route path="/Compete/hackathon/:id/participate" element={<HackathonParticipation />} />
         <Route path="/Course-management" element={<AdminCourseManage />} />
         <Route path="/Course-management/learning_path" element={<AdminCreatePath />} />
         <Route path="/Claims" element={<AdminClaims />} />
