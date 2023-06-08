@@ -16,4 +16,5 @@ router.get('/instructor/:id',hackathonController.getHackathonsByInst )
 router.put('/:id', hackathonController.updateHackathon)
 router.delete('/:id', hackathonController.deleteHackathon)
 
+router.post('/:id/registerteam', hackathonController.registerTeam)
 module.exports = router;

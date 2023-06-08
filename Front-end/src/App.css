@@ -1,0 +1,401 @@
+@import url('https://fonts.googleapis.com/css2?family=Bellota+Text:wght@700&family=Inter+Tight:wght@700&family=Inter:wght@500&family=Lato&family=Lexend+Mega:wght@600&family=Poppins:wght@500&family=Work+Sans&display=swap');
+  *{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0%;
+    font-family:'inter  ' , sans-serif;
+  user-select: none;
+
+  } 
+
+  a{
+    text-decoration: none;
+  }
+ .section{
+  width: 90px;
+  
+ }
+ @media (max-width: 768px){
+.section{  width:100px;}
+  .Error-container{ flex-direction: column-reverse;}
+  .Error-img{order: 1;}
+  }
+ @media (max-width: 668px){
+.MuiTextField-root{ width: 10ch;}
+  .Login-wrapper{max-width: 100vw};
+  .MuiFormControl-root.css-lour95-MuiFormControl-root{
+     width: 25ch;
+  }
+ }
+ .ML{ 
+  max-width: 100%;
+  margin-top: 0;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-right: 0; 
+    }
+   .svgbtn{
+    position: relative;
+    left: 100px;
+    
+    top: 60PX;
+    bottom: 35.74%;
+     color: none;
+    border: none;
+   }
+   .btn ,.svgbtn:hover{
+    cursor: pointer;
+   }
+
+   .svgbtn .courses{
+    }
+ 
+    .Lesson-icon{
+  display: flex;
+  flex-direction: column;
+align-items: center;
+justify-content: space-between;    }
+.icon{
+  margin:10px;
+}
+.Error-container{
+  display: flex;
+}
+.Error{
+  padding:  100px ;
+  font-size: xx-large;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.Error-img{
+  width: 50%;
+  height: 70%;
+  
+}
+ svg.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active  {
+  color:#F989E6;
+}
+
+svg.css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed  {
+  color:#F989E6;
+}
+button.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+
+  color:#F989E6;
+
+}
+.MuiBox-root.css-2royc9{
+  padding-top: 0;
+}
+
+
+.MuiStepper-root.MuiStepper-horizontal.css-m5vj9m-MuiStepper-root{
+
+  padding: 50px;
+}
+.Login-container {
+background: #F2F2F2;
+ height:760px;
+ width:100%;
+ padding: 30px;
+}
+.Login-wrapper{
+
+width: 706px;
+height: 671px;
+margin:  auto;
+background: #FFFFFF;
+box-shadow: 0px 5px 8px rgba(0, 0, 0, 0.25);
+border-radius: 50px; 
+
+}
+.Login-privacy{
+display:flex;
+ flex-direction:column; 
+ align-items: center;
+  justify-content: center;
+   margin: 0 0 0 40px;}
+
+.hidden{
+  display: none;
+} 
+.sc-bCDidY.duOivY{
+ margin:0;
+}
+.MuiBox-root.css-1xj45fm{
+
+  background: #FFFFFF;
+  box-shadow: 0px 0px 41px -10px rgba(0, 0, 0, 0.25);
+  border-radius: 50px;
+  width: 750px;
+height: 643px;
+padding: 30px;
+border: none;
+}
+.close:hover{
+  cursor: pointer;
+}
+.blur{
+    
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+  pointer-events: none;
+
+}  
+
+.nextui-c-gEEnVX-qXFXw-color-default .nextui-avatar-bg {
+  background: #e6e8eb00;
+}
+
+.card7 {
+  position: relative;
+  width: 300px;
+  height: 400px;
+  margin: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.card__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.card__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background-color: #fff;
+  transition: transform 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.card__title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.card__text {
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.card__button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #000;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 35px;
+}
+
+.card7:hover {
+  transform: translateY(-10px);
+}
+
+.card7:hover .card__image img {
+  transform: scale(1.2);
+}
+
+.card7:hover .card__content {
+  transform: translateY(-100%);
+}
+
+.card__image {
+  height: 400px;
+  width: 300px;
+  background-color: #BCBAFF;
+  /* you can put img url here  */
+}
+.errmsg{
+  margin:auto 80px;
+
+   color:red;
+   animation: shake 0.2s ease-in-out 0s 2;
+
+         fontWeight:300;
+          padding:30px;
+}
+@keyframes shake {
+  0% {
+    margin-left: 0rem;
+  }
+  25% {
+    margin-left: 0.5rem;
+  }
+  75% {
+    margin-left: -0.5rem;
+  }
+  100% {
+    margin-left: 0rem;
+  }
+}
+
+   
+.nextui-c-euEGCc-fTVLic-color-success {
+  --nextui--checkboxColor:#F989E6;
+  --nextui--checkboxColorHover:#e47ad3;
+}
+
+.MuiButtonBase-root.MuiPickersDay-root.Mui-selected.MuiPickersDay-dayWithMargin.css-qa7bje-MuiButtonBase-root-MuiPickersDay-root,.MuiButtonBase-root.MuiPickersDay-root.Mui-selected.MuiPickersDay-dayWithMargin.MuiPickersDay-today.css-1jsy6pn-MuiButtonBase-root-MuiPickersDay-root,.css-1jsy6pn-MuiButtonBase-root-MuiPickersDay-root.Mui-selected{
+background-color: #e47ad3;
+} 
+.css-1jsy6pn-MuiButtonBase-root-MuiPickersDay-root.Mui-selected:hover{
+background-color: #fed4f7;
+
+}
+
+.otp-container{
+  padding: 30px;
+ }
+ 
+
+ .HackStepper .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-active {
+  color: #8D8AFD;
+  
+ } 
+
+
+
+ .HackStepper .css-1u4zpwo-MuiSvgIcon-root-MuiStepIcon-root.Mui-completed {
+  color: #8D8AFD;
+ } 
+ .previewImage {
+  width: 200px;
+  height: 200px; 
+}
+
+.rbc-btn-group{
+  
+}
+span.rbc-btn-group{
+  border-radius: 20px;
+  padding: 20px;
+  
+}
+
+.rbc-toolbar button {
+ 
+  border: 1px solid rgb(126, 126, 126);
+  border-radius: 20px;
+
+  background-color: white;
+}
+div.rbc-month-view{
+  border:  1px solid rgb(126, 126, 126);
+  border-radius: 14px;
+  
+}
+ div.rbc-header{
+  border-bottom: 1px solid #000; 
+}
+
+.rbc-day-bg.rbc-today{
+  background-color:#fde2f9;
+  
+}
+button.MuiButtonBase-root.MuiTab-root.MuiTab-textColorPrimary.Mui-selected.css-1h9z7r5-MuiButtonBase-root-MuiTab-flexContainer, .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected, .css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected{
+ color: #e47ad3;
+
+}
+button.css-1h9z7r5-MuiButtonBase-root-MuiTab-root.Mui-selected{
+  color: #e47ad3;
+
+}
+.shadow{
+box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.25);
+
+}
+
+.nextui-c-boZsAS{
+  background: white;
+}
+span.MuiTabs-indicator.css-10d9dml-MuiTabs-indicator {
+background-color: #e47ad3;
+
+}
+.lihover:hover{
+  background-color: rgb(218, 218, 218);
+  cursor: pointer;
+  border-radius: 20px;
+   padding: 110%;
+   transition: 0.2s ease-in-out;
+  } 
+.denied {
+   color: darkgray;
+  text-decoration:line-through;
+}
+  
+
+.dnd-list {
+  display: flex;
+  flex-direction: row;
+  height: 35px;
+  margin-bottom: 10px;
+}
+
+.input-item {
+  position: relative;
+  height: 100%;
+  border: solid black 1px;
+  flex-basis: 85%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+ 
+  font-size: calc(10px + 2vmin);
+  color: black;
+   margin:  10px auto;
+  border-radius: 15px;
+  cursor: move;
+  padding: 20px;
+}
+
+.over {
+  transform: scale(1.01);
+  border: 1px dashed #eee;
+}
+
+.addButton {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  line-height: 26px;
+  border: none;
+  color: black;
+  border-radius: 50%;
+  font-size: 24px;
+}
+
+.delButton {
+  display: flex;
+  align-items: center;
+  color: darkgrey;
+  margin-left: 10px;
+  height: 37px;
+  width: 30px;
+  font-size: 20px;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+
