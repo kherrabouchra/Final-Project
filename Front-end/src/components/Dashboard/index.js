@@ -15,19 +15,23 @@ import CircularStatic from '../Global/CircularProgress'
 import ProgressBar from '../Global/ProgressBar'
 import { useEffect } from 'react' 
 import { useFetch } from '../useFetch'
-import axios from 'axios'
+import axios, { all } from 'axios'
 import { dark } from '@mui/material/styles/createPalette'
 import api from '../../api/api'
 const Dashboard = (props) => {
 
   const [courses, setCourses] = useState([]);
-  const [hackathons, setHackathons] = useState(["es"]);
+  const[lessons, setLessons]=useState('')
+  const[allLessons, setAllLessons]=useState([])
+
+  const [hackathons, setHackathons] = useState([]);
   const [notifications, setNotifications] = useState([]);
 const [user , setUser]=useState('')
   // Assuming that the `courses` state is updated with the list of courses
   const coursesExist = courses && courses.length > 0;
   const hackathonsExist = hackathons && hackathons.length > 0;
   const notificationsExist = notifications &&  notifications.length > 0;
+  const [enrolled, setEnrolled]=useState([])
   const location = useLocation();
   const state = location.state;   
 console.log(state);
@@ -44,14 +48,132 @@ api.get(`/user/${state.userID}`)
 }).catch((err)=>console.log(err))
 
   }, [state])
+  
+  
+  useEffect(() => {
+    api.get(`/courses/enrolled/${user.userID}`)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status === "success") {
+          setEnrolled(res.data.data);
+  
+       
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [user]);
+  
+
+  useEffect(()=>{
+
+  const fetchCoursePromises = enrolled.map((e) =>
+  api.get(`/courses/${e.course}`)
+);
+Promise.all(fetchCoursePromises)
+  .then((results) => {
+    const newCourses = results.map((result) => result.data.data);
+    const filteredCourses = newCourses.filter(
+      (newCourse) => !courses.find((course) => course.courseID === newCourse.courseID)
+    );
+    setCourses([...courses, ...filteredCourses]);
+  })
+  .catch((err) => console.log(err));
+
+    const fetchLessonPromises = enrolled.map((e) =>
+    api.get(`/courses/lessons/get/${e.currentMaterial}`)
+  );
+
+  Promise.all(fetchLessonPromises)
+    .then((lessonResults) => { 
+      const newLessons = lessonResults.map(
+        (lessonResult) => lessonResult.data.data
+      );
+      setLessons([...lessons, ...newLessons]);
+    })
+    .catch((err) => console.log(err));
 
  
+  }, [enrolled])
+         
+  
+
+
+  useEffect(() => {
+    const fetchCourseLessons = async () => {
+      try {
+        const fetchCourseLessonsPromises = enrolled.map((e) =>
+          api.get(`/courses/lessons/getAll/course/${e.course}`)
+        );
+        const results = await Promise.all(fetchCourseLessonsPromises);
+        console.log(results);
+  
+        const newCourseLessons = results.map((result) => result.data.data);
+        setAllLessons([...allLessons, ...newCourseLessons]);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    fetchCourseLessons();
+  }, [enrolled]);
+
+  const [allPerc, setAllPerc]=useState([])
+
+               
+    const calculateCompletionPercentage = () => {
+      if (allLessons.length === 0) {
+        return 0;
+      }
+       const allPer=[];
+      let totalLessonCount = 0;
+      let completedLessonCount = 0;
+      
+      enrolled.forEach((enrollment) => {
+        const course = courses.find((course) => course.courseID === enrollment.course);
+        if (!course) {
+          console.log(`Course not found for enrollment: ${JSON.stringify(enrollment)}`);
+          return;
+   
+       }
+        const courseLessons = allLessons.find((lessons) => lessons[0].courseID === course.courseID);
+        if (!courseLessons) {
+          console.log(`Lessons not found for course: ${JSON.stringify(course)}`);
+          return;
+        }
+        console.log(courseLessons);
+  
+        totalLessonCount += courseLessons.length;
+           console.log(totalLessonCount);
+        if (courseLessons.map((lesson) => lesson.id === enrollment.currentMaterial)) {
+        
+          completedLessonCount += 1;
+        }
+    const percentage = (completedLessonCount / totalLessonCount) * 100;
+      console.log(percentage, completedLessonCount, totalLessonCount);
+       
+      allPerc.push( percentage.toFixed(2));
+    
+
+      });  
+      return allPerc;
+      
+    };
+
+  
+      console.log(calculateCompletionPercentage(),"sdc");
+   
+  
+                        
+ console.log(enrolled);
+ console.log(courses);
+console.log(lessons);
+console.log(allLessons);
 
 function calculatePercentageToNextLevel( data) {
   const currentLevel=  user.level;
 const currentPoints =  user.points;
   const levelThresholds =[125, 225, 350, 500, 700, 950, 1250, 1600, 2000, 2500, 3100, 3800, 4600, 5500, 6500, 7600, 8800, 10100, 11500, 13000]; // level thresholds in points
-  const nextLevelThreshold = levelThresholds[currentLevel]; // points needed for next level
+  const nextLevelThreshold = levelThresholds[currentLevel-1]; // points needed for next level
   const pointsNeeded = nextLevelThreshold - currentPoints; // points needed to reach next level
  const percentage =parseInt((pointsNeeded / nextLevelThreshold) * 100); // percentage of points needed
  return  percentage;
@@ -78,7 +200,7 @@ const currentPoints =  user.points;
             <SectionTextWrap >   <h1>My courses</h1><HorizontalSeparator  width={"60%"}/></SectionTextWrap>
             
             
-            {coursesExist ? ( <CollapseList/> ) : (<div style={{margin: "20px auto", display:'flex', flexDirection:"column",
+            {coursesExist ? ( <CollapseList courses={courses} lessons={lessons} percentage={calculateCompletionPercentage()}/> ) : (<div style={{margin: "20px auto", display:'flex', flexDirection:"column",
            alignItems:"center"}}><img alt='my courses' style={{width:"150px",margin: "auto"}} src="../images/mycourses.png"/> 
             <P>No enrolled courses. Check out available courses <Link to="/Learn"> here.</Link></P> </div>)}
            

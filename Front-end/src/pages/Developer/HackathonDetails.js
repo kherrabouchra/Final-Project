@@ -1,10 +1,10 @@
 import React from 'react'
 import Hackathon from '../../components/Hackathon/dev/Details'
-import {NavBarDev} from '../../components/NavBar/index-2'
 import { useParams } from 'react-router-dom'
 import { useState , useEffect} from 'react'
 import api from '../../api/api'
 import axios from 'axios'
+import { NavBarDev } from '../../components/NavBar/index-2'
 
 const HackathonDetails = () => {
   const {id} = useParams();
@@ -19,10 +19,9 @@ const HackathonDetails = () => {
 
 
   return (
-    <div>
-        <NavBarDev/>
+    <> <NavBarDev/>
       <Hackathon data={data}/>
-    </div>
+    </>
   )
 }
 

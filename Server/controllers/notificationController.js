@@ -21,7 +21,7 @@ exports.getNotifications =  (req, res, next)  => {
       }
     con.query('SELECT * FROM notifications where recipientID = ? ',[req.params.id], function (err, data, fields) { 
       if (err) res.json({Error:err});
-     res.status(201).json({
+     res.json({
        status: "success",
        length: data?.length,
        data: data,

@@ -53,6 +53,9 @@ import RecruiterDashboard from './pages/Recruiter/RecruiterDashboard';
 import JobOfferManage from './pages/Recruiter/Joboffer';
 import CandidatesPage from './pages/Recruiter/Candidates';
 import Createjoboffer from './pages/Recruiter/CreateJobofferPage';
+import HackathonParticipation from './pages/Developer/HackathonParticipation';
+import JobsDetailsPage from './pages/Developer/JobsDetailsPage';
+import JobChallenge from './components/Job/JobsDetails/JobChallenge';
 
 function App( ) {
   const [loginStatus, setLoginStatus]=useState('')
@@ -139,6 +142,9 @@ if (loading) {
         <Route path="/Learn/:type/:id" element={<ViewCourse />} />
         <Route path="/Compete" element={<CompetePage />} />
         <Route path="/Jobs" element={<JobsPage />} />
+        <Route path="/Jobs/:id" element={<JobsDetailsPage />} />
+        <Route path="/Jobs/:id/challenge" element={<JobChallenge />} />
+
         <Route path="/dashboard" element={<DevDahboard />} />
         <Route path="/instructor/:id" element={<InstructorDashPage />} />
         <Route path="/instdash/courses" element={<CourseManagamentPage />} />
@@ -152,6 +158,7 @@ if (loading) {
         <Route path="/courses/new" element={<CreateCourse />} />
         <Route path="/dashboard/courses/lesson/:id" element={<PrtcptCourse />} />
         <Route path="/Compete/hackathon/:id" element={<HackathonDetails />} />
+        <Route path="/Compete/hackathon/:id/participate" element={<HackathonParticipation />} />
         <Route path="/Course-management" element={<AdminCourseManage />} />
         <Route path="/Course-management/learning_path" element={<AdminCreatePath />} />
         <Route path="/Claims" element={<AdminClaims />} />

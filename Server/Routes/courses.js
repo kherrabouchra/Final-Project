@@ -6,6 +6,7 @@ router.post('/', CourseController.createCourse);
 router.get('/', CourseController.getAllCourses);
 router.get('/getAll/:id', CourseController.getAllCoursesByInst);
 router.get('/:id', CourseController.getCourse);
+router.get('/enrolled/:id', CourseController.getEnrolledCourses);
 router.put('/:id', CourseController.updateCourse);
 router.delete('/:id', CourseController.deleteCourse);
 
@@ -17,6 +18,8 @@ router.get('/chapters/get/:id', CourseController.getChapter);
 router.post('/chapters/create', CourseController.createChapter);
 
 router.get('/lessons/getAll/:id', CourseController.getAllLessons);
+router.get('/lessons/getAll/course/:id', CourseController.getAllLessonsBycourse);
+
 router.get('/lessons/get/:id', CourseController.getLesson);
 router.get('/lessons/getByCourse/:id', CourseController.getCourseLesson);
 

@@ -45,6 +45,19 @@ const getAllCoursesByInst = (req, res) => {
       console.log(data);
     });
   };
+  const getEnrolledCourses = (req, res) => {
+    const stmt =
+      "SELECT *  from enrolled_course WHERE developer = ? ";
+  
+    const id = req.params.id;
+  
+    connection.query(stmt, id, (err, data) => {
+      if (err) return res.json({ status: err });
+  
+      res.json({status:"success",data:data});
+      console.log(data);
+    });
+  };
 const updateCourse = (req, res) => {
   const stmt = "UPDATE gamified_course SET ? WHERE courseID = ?";
 
@@ -183,6 +196,24 @@ const getAllLessons = (req, res) => {
 };
 
 
+const getAllLessonsBycourse = (req, res) => {
+  const stmt =
+    "SELECT lessons.*, gamified_course.courseID FROM lessons, gamified_course  where   chapterID in (select id from chapters where courseID = ? ) and courseID=?";
+
+  const courseID = req.params.id;
+   const id=req.params.id;
+  connection.query(stmt, [courseID,id], (err, data) => {
+    if (err) return res.status(500).json({ status: err });
+
+    /* if (data.length === 0) return res.status(400).json({ "message": `Course ${id} not found`}); */
+
+    res.json({status: 'success', data:data});
+    console.log(data);
+  });
+};
+
+
+
 
 const getAllCoursesQuiz = (req, res) => {
   const stmt =
@@ -237,8 +268,7 @@ const getLesson = (req, res) => {
     console.log(data[0]);
   });
 };
-
-
+ 
 const getCourseLesson = (req, res) => {
   const stmt =
     "SELECT chapters.chapterName, lessons.*, quiz.id AS quizID, quiz.exercise, quiz.option_a, quiz.option_b, quiz.option_c, quiz.option_d, quiz.correct_answer, quiz.lessonID FROM chapters LEFT JOIN lessons ON lessons.chapterID = chapters.id LEFT JOIN quiz ON lessons.id = quiz.lessonID WHERE chapters.courseID = ?";
@@ -300,13 +330,13 @@ module.exports = {
   createCourse, 
   getAllCoursesByInst,
   getAllCourses, getCourseLesson,
-  getCourse,
+  getCourse,getEnrolledCourses, 
   updateCourse,
   deleteCourse,
   getAllChapters,
   getChapter,
   getAllLessons,
-  getLesson,
+  getLesson,getAllLessonsBycourse,
   createChapter,
   createLesson,
   createQuiz,

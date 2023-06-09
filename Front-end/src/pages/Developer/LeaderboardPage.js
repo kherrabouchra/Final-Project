@@ -10,7 +10,7 @@ const user= loc.state;
 console.log(user);
   return (
     <div>
-        <NavBarDev ></NavBarDev>
+        <NavBarDev /> 
          <Leaderboard></Leaderboard>
     </div>
   )

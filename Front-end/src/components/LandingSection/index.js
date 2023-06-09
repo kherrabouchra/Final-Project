@@ -1,6 +1,6 @@
 import React from "react";
 import { Coin,Card1, Section,Card, Mac , LargeText, SmallText,
-    Underline, Card2, Card3,JobSection, LandingP, Trophy, Sprinkle, DoodleArrow} from "./LandingContent";
+    Underline, Card2, Card3,JobSection, LandingP, Trophy, Sprinkle, DoodleArrow, Glass, Noise} from "./LandingContent";
 // import { CircleDoodle } from "../Global/GlobalComponents";
 import { Headline } from "../HeroSection/HeroElements";
 import { Btn, P , WhiteBtn, Arrow} from "../Global/GlobalComponents";
@@ -63,8 +63,11 @@ recommendations.</SmallText>
    <div style={{position: 'absolute',top:"3140px" , color:"white", width:"700px", left: "600px" }}>
     <Headline data-aos="slide-left">Earn points and build 
         up your profile.</Headline>
+          <p style={{color:'white',position: 'absolute',top:"400px", fontSize:"48px", marginLeft:'-500px', width:'50vw'}}>Track your daily progress and stay updated with your journey on an interactive dashboard.</p>
+        <img data-aos="slide-up" style={{ position: 'absolute',top:"200px", zIndex:2000, width:"850px"}} alt="dash" src="../images/dash.png"/>
         <NavBtnLink  onClick={()=>navigate('/login')} style={{ position: 'absolute',top:"840px", marginTop:"20px", fontSize:"large",  padding:'  10px 14px'}}>Get started <Arrow/></NavBtnLink>
         </div>
+        <img src="../images/chal.png" style={{width:'850px',position: 'absolute',top:"4210px", zIndex:2000,}}/> 
      <div style={{position: 'absolute',top:"4840px", width :"100%", marginBottom:0}}>  <Footer/></div>
    
     <Section className="section" ></Section> </div> 

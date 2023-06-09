@@ -234,7 +234,12 @@ if(k==="logout") handleLogout();
                     <NotificationIconWrapper>
                       <Icon icon={notificationIcon} />
                     </NotificationIconWrapper>
-                    <NotificationText>{n.title}: {JSON.parse(n.description).name}</NotificationText>
+                    {user.role==='instructor'  && 
+                    <NotificationText>{n.title}: {JSON.parse(n.description).name}</NotificationText>}
+                   
+                   {user.role==='developer' &&
+                   <NotificationText>{n.title}:</NotificationText>}
+                    
                     <NotificationDate>{timeAgo(n.date_time)}</NotificationDate>
                   </Notification>
                 )).reverse()

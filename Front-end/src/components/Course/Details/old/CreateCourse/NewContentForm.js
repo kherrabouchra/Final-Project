@@ -83,7 +83,7 @@ const NewContentForm = () => {
   ]);
 
   // const { id } = useParams();
-const id= 1;
+  const id = 1;
   const fetchCourses = async () => {
     try {
       const course = await api.get(`/courses/${id}`);
@@ -126,10 +126,9 @@ const id= 1;
       const quiz = await api.post("courses/quiz/create", quizData);
       console.log(lesson.data);
       console.log(quiz.data);
-    } catch (err) { ;
+    } catch (err) {
       console.log(err);
     }
-    
   };
 
   console.log(lessons);
@@ -151,8 +150,6 @@ const id= 1;
   const handleOptionChange = (event) => {
     setCorrect_answer(event.target.value);
   };
-
- 
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -252,7 +249,7 @@ const id= 1;
     setVideoUrl(videoUrl);
   };
 
-  console.log(videoUrl)
+  console.log(videoUrl);
 
   useEffect(() => {
     const script = document.createElement("script");
@@ -282,357 +279,362 @@ const id= 1;
       <Link to="/instdash/courses">
         <GoBack color={"black"} />
       </Link>
-     
-          <Box sx={{ width: "90%", margin: "auto" }}>
-            <Stepper style={{width:"70%"  ,margin: "auto" }} activeStep={activeStep}>
-              {steps.map((label, index) => {
-                const stepProps = {};
-                const labelProps = {};
-                if (isStepOptional(index)) {
-                  labelProps.optional = (
-                    <Typography variant="caption"> </Typography>
-                  );
-                }
-                if (isStepSkipped(index)) {
-                  stepProps.completed = false;
-                }
 
+      <Box sx={{ width: "90%", margin: "auto" }}>
+        <Stepper
+          style={{ width: "70%", margin: "auto" }}
+          activeStep={activeStep}
+        >
+          {steps.map((label, index) => {
+            const stepProps = {};
+            const labelProps = {};
+            if (isStepOptional(index)) {
+              labelProps.optional = (
+                <Typography variant="caption"> </Typography>
+              );
+            }
+            if (isStepSkipped(index)) {
+              stepProps.completed = false;
+            }
+
+            return (
+              <Step key={label} {...stepProps}>
+                <StepLabel className="HackStepper" {...labelProps}>
+                  {label}
+                </StepLabel>
+              </Step>
+            );
+          })}
+        </Stepper>
+
+        {activeStep === 0 && (
+          <>
+            <Header>{courseName}</Header>
+            <TextSub style={{ width: "70%", margin: "10px 100px" }}>
+              Here is the gamified course and its syllabus. You're going to
+              create the content of it.
+            </TextSub>
+
+            <Box sx={{ padding: "20px 50px", width: "70%", maxWidth: "100%" }}>
+              <SyllabusTitle>Syllabus</SyllabusTitle>
+              {chapters.map((chapter, index) => {
                 return (
-                  <Step key={label} {...stepProps}>
-                    <StepLabel className="HackStepper" {...labelProps}>
-                      {label}
-                    </StepLabel>
-                  </Step>
+                  <SyllabusList key={chapter.id}>
+                    {/* <LessonIcon lesson={chapter.id} /> */}
+                    <li>
+                      <SyllabusIndex>{index + 1}. </SyllabusIndex>
+                      {chapter.chapterName}
+                    </li>
+                  </SyllabusList>
                 );
               })}
-            </Stepper>
+              {error && <div className="errmsg">{error}</div>}
+            </Box>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                margin: " 20px 150px",
+                alignItems: "flex-end",
+              }}
+            >
+              <Box sx={{ flex: "1 1 auto" }} />
 
-            {activeStep === 0 && (
-              <>
-                <Header>{courseName}</Header>
-                <TextSub style={{ width: "70%", margin: "10px 100px" }}>
-                  Here is the gamified course and its syllabus. You're going to
-                  create the content of it.
-                </TextSub>
+              <BlackBtn
+                style={{ padding: "10px 16px" }}
+                /* onClick={handleFirstPart} */
+                onClick={handleNext}
+              >
+                Next
+              </BlackBtn>
+            </Box>
+          </>
+        )}
+        {activeStep === 1 && (
+          <>
+            <Header>Content</Header>
+            <TextSub style={{ width: "70%", margin: "20px 100px" }}>
+              Create the content of the gamified course from the chapters to the
+              sections.
+            </TextSub>
 
-                <Box
-                  sx={{ padding: "20px 50px", width: "70%", maxWidth: "100%" }}
-                >
-              
-                  <SyllabusTitle>Syllabus</SyllabusTitle>
-                  {chapters.map((chapter, index) => {
-                    return (
-                      <SyllabusList key={chapter.id}>
-                        {/* <LessonIcon lesson={chapter.id} /> */}
-                        <li>
-                          <SyllabusIndex>{index + 1}. </SyllabusIndex>
-                          {chapter.chapterName}
-                        </li>
-                      </SyllabusList>
-                    );
-                  })}
-                  {error && <div className="errmsg">{error}</div>}
-                </Box>
-                <Box
+            {chapters.map((chapter, chapterIndex) =>   (
+              <div key={chapter.id} style={{ margin: "0 60px" }}>
+                <h2 style={{ margin: "30px 30px 0 30px" }}>
+                  {chapterIndex + 1}. {chapter.chapterName}
+                </h2>
+                <div
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
-                    margin: " 20px 150px",
+                    justifyContent: "flex-end",
                     alignItems: "flex-end",
+                    margin: "10px",
                   }}
                 >
-                  <Box sx={{ flex: "1 1 auto" }} />
+                  {lessons.some(
+                    (lesson) => lesson.chapterID === chapter.id
+                  ) && (
+                    <BlackBtn
+                      onClick={() =>
+                        setLessons((prevLessons) =>
+                          prevLessons.filter(
+                            (lesson) => lesson.chapterID !== chapter.id
+                          )
+                        )
+                      }
+                    >
+                      Reset
+                    </BlackBtn>
+                  )}
 
-                  <BlackBtn
-                    style={{ padding: "10px 16px" }}
-                    /* onClick={handleFirstPart} */
-                    onClick={handleNext}
-                  >
-                    Next
+                  <BlackBtn onClick={() => addLesson(chapterIndex)}>
+                    + Section
                   </BlackBtn>
-                </Box>
-              </>
-            )}
-            {activeStep === 1 && (
-              <>
-                <Header>Content</Header>
-                <TextSub style={{ width: "70%", margin: "20px 100px" }}>
-                  Create the content of the gamified course from the chapters to the sections.
-                </TextSub>
+                </div>
 
-                {chapters.map((chapter, chapterIndex) => (
-                  <div key={chapter.id} style={{margin:"0 60px"}}>
-                    <h2 style={{ margin: "30px 30px 0 30px" }}>
-                      {chapterIndex + 1}. {chapter.chapterName}
-                    </h2>
+                <HorizontalSeparator />
+                {lessons.map((lesson, lessonIndex) =>
+                  lesson.chapterID === chapter.id ? (
                     <div
+                      key={lessonIndex}
                       style={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "flex-end",margin:"10px"
+                        border: "1.6px solid black",
+                        padding: "50px",
+                        borderRadius: "30px",
+                        margin: "30px 40px",
                       }}
                     >
-                      {lessons.some(
-                        (lesson) => lesson.chapterID === chapter.id
-                      ) && (
-                        <BlackBtn
-                          onClick={() =>
-                            setLessons((prevLessons) =>
-                              prevLessons.filter(
-                                (lesson) => lesson.chapterID !== chapter.id
-                              )
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <h2 style={{ margin: "auto ", flex: 1 }}>
+                          Section {lessonIndex + 1}:
+                        </h2>
+                        <Input
+                          bordered
+                          label="Title"
+                          id={`lesson-${lessonIndex}-name`}
+                          style={{ width: "55vw" }}
+                          multiline
+                          onChange={(event) =>
+                            handleLessonChange(
+                              lessonIndex,
+                              "lessonName",
+                              event.target.value
                             )
                           }
+                          value={lesson.lessonName}
+                          onKeyDown={handleKeyDown}
+                        />
+                      </div>
+
+                      <TypeWrapper style={{ padding: "30px 40px 20px 30px" }}>
+                        <TypeContainer
+                          onClick={() => handleTypeClick(lessonIndex, "video")}
+                          style={{
+                            height: "125px",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            padding: "45px",
+                          }}
                         >
-                          Reset
-                        </BlackBtn>
-                      )}
-
-                      <BlackBtn onClick={() => addLesson(chapterIndex)}>
-                        + Section
-                      </BlackBtn>
-                    </div>
-
-                    <HorizontalSeparator />
-                    {lessons.map((lesson, lessonIndex) =>
-                      lesson.chapterID === chapter.id ? (
-                        <div key={lessonIndex} style={{border:'1.6px solid black' , padding:"50px", borderRadius:"30px", margin:'30px 40px'}}>
-                         <div style={{display:"flex", justifyContent:"center", alignItems:"center"}}>
-                          <h2 style={{ margin: "auto " , flex:1}}>
-                         Section {lessonIndex + 1}:
-                          </h2>
-                          <Input bordered
-                            label="Title"
-                            id={`lesson-${lessonIndex}-name`}
-                            style={{ width:"55vw"}}
-                            multiline
-                            onChange={(event) =>
-                              handleLessonChange(
-                                lessonIndex,
-                                "lessonName",
-                                event.target.value
-                              )
-                            }
-                            value={lesson.lessonName}
-                            onKeyDown={handleKeyDown}
-                          /></div> 
-                        
-                          <TypeWrapper
-                            style={{ padding: "30px 40px 20px 30px" }}
-                          >
-                            <TypeContainer
-                              onClick={() =>
-                                handleTypeClick(lessonIndex, "video")
-                              }
-                              style={{
-                                height: "125px",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                padding: "45px",
-                              }}
-                            >
-                              <input
-                                className="radio"
-                                type="radio"
-                                id={`video${lessonIndex}`}
-                                name={`type${lessonIndex}`}
-                                value="video"
-                                checked={lesson.type === "video"}
-                                onChange={() => {}}
-                                style={{ cursor: "pointer" }}
-                              />
-                              <label
-                                htmlFor={`video${lessonIndex}`}
-                                style={{ cursor: "pointer" }}
-                              >
-                                <h1>Video</h1>
-                              </label>
-                            </TypeContainer>
-                            <TypeContainer
-                              onClick={() =>
-                                handleTypeClick(lessonIndex, "quiz")
-                              }
-                              style={{
-                                height: "125px",
-                                flexDirection: "row",
-                                alignItems: "center",
-                                padding: "45px",
-                                cursor: "pointer",
-                              }}
-                            >
-                              <input
-                                className="radio"
-                                type="radio"
-                                id={`quiz${lessonIndex}`}
-                                name="type"
-                                value={`type${lessonIndex}`}
-                                checked={lesson.type === "quiz"}
-                                onChange={() => {}}
-                                style={{ cursor: "pointer" }}
-                              />
-                              <label
-                                htmlFor={`quiz${lessonIndex}`}
-                                style={{ cursor: "pointer" }}
-                              >
-                                <h1>Quiz</h1>
-                              </label>
-                            </TypeContainer>
-                          </TypeWrapper>
-
-                          <Input type="number" bordered
-                             label="Points"
-                             id={`lesson-${lessonIndex}-points`}
-                             style={{ margin: "20px" }}
-                             multiline
-                             onChange={(event) =>
-                               handleLessonChange(
-                                 lessonIndex,
-                                 "points",
-                                 event.target.value
-                               )
-                             }
-                             value={lesson.points}
-                             onKeyDown={handleKeyDown}
-                           
+                          <input
+                            className="radio"
+                            type="radio"
+                            id={`video${lessonIndex}`}
+                            name={`type${lessonIndex}`}
+                            value="video"
+                            checked={lesson.type === "video"}
+                            onChange={() => {}}
+                            style={{ cursor: "pointer" }}
                           />
-                          {/* <VideoUploader video={video} setVideo={setVideo} /> */}
-                          {lesson.type === "video" && (
-                            <>
-                              <VideoUploader onUpload={handleVideoUpload} />
-                              {videoUrl && (
-                                <CloudinaryVideoContainer cloudName="dub9jmuyb">
-                                  <VideoWndw publicId={videoUrl} controls />
-                                </CloudinaryVideoContainer>
+                          <label
+                            htmlFor={`video${lessonIndex}`}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <h1>Video</h1>
+                          </label>
+                        </TypeContainer>
+                        <TypeContainer
+                          onClick={() => handleTypeClick(lessonIndex, "quiz")}
+                          style={{
+                            height: "125px",
+                            flexDirection: "row",
+                            alignItems: "center",
+                            padding: "45px",
+                            cursor: "pointer",
+                          }}
+                        >
+                          <input
+                            className="radio"
+                            type="radio"
+                            id={`quiz${lessonIndex}`}
+                            name="type"
+                            value={`type${lessonIndex}`}
+                            checked={lesson.type === "quiz"}
+                            onChange={() => {}}
+                            style={{ cursor: "pointer" }}
+                          />
+                          <label
+                            htmlFor={`quiz${lessonIndex}`}
+                            style={{ cursor: "pointer" }}
+                          >
+                            <h1>Quiz</h1>
+                          </label>
+                        </TypeContainer>
+                      </TypeWrapper>
+
+                      <Input
+                        type="number"
+                        bordered
+                        label="Points"
+                        id={`lesson-${lessonIndex}-points`}
+                        style={{ margin: "20px" }}
+                        multiline
+                        onChange={(event) =>
+                          handleLessonChange(
+                            lessonIndex,
+                            "points",
+                            event.target.value
+                          )
+                        }
+                        value={lesson.points}
+                        onKeyDown={handleKeyDown}
+                      />
+                      {/* <VideoUploader video={video} setVideo={setVideo} /> */}
+                      {lesson.type === "video" && (
+                        <>
+                          <VideoUploader onUpload={handleVideoUpload} />
+                          {videoUrl && (
+                            <CloudinaryVideoContainer cloudName="dub9jmuyb">
+                              <VideoWndw publicId={videoUrl} controls />
+                            </CloudinaryVideoContainer>
+                          )}
+                        </>
+                      )}
+                      {lesson.type === "quiz" && (
+                        <div>
+                          <TextField
+                            fullWidth
+                            label="Exercise text"
+                            id="desc"
+                            style={{ margin: "20px" }}
+                            onChange={(e) => setExercise(e.target.value)}
+                            value={exercise}
+                            multiline
+                            rows={5}
+                            onKeyDown={handleKeyDown}
+                          />
+
+                          {options.map((option, index) => (
+                            <OptionsContainer key={option.id}>
+                              {isEditing === index ? (
+                                <TextInput
+                                  type="text"
+                                  value={option.label}
+                                  onChange={(event) =>
+                                    handleChange(event, index)
+                                  }
+                                  onBlur={() => handleBlur(index)}
+                                  autoFocus
+                                />
+                              ) : (
+                                <Label
+                                  onDoubleClick={() => handleDoubleClick(index)}
+                                >
+                                  <RadioInput
+                                    type="radio"
+                                    value={option.id}
+                                    checked={correct_answer === option.id}
+                                    onChange={handleOptionChange}
+                                  />
+                                  {option.label}
+                                </Label>
                               )}
-                            </>
-                          )}
-                          {lesson.type === "quiz" && (
-                            <div>
-                              <TextField
-                                fullWidth
-                                label="Exercise text"
-                                id="desc"
-                                style={{ margin: "20px" }}
-                                onChange={(e) => setExercise(e.target.value)}
-                                value={exercise}
-                                multiline
-                                rows={5}
-                                onKeyDown={handleKeyDown}
-                              />
-                            
-                              {options.map((option, index) => (
-                                <OptionsContainer key={option.id}>
-                                  {isEditing === index ? (
-                                    <TextInput
-                                      type="text"
-                                      value={option.label}
-                                      onChange={(event) =>
-                                        handleChange(event, index)
-                                      }
-                                      onBlur={() => handleBlur(index)}
-                                      autoFocus
-                                    />
-                                  ) : (
-                                    <Label
-                                      onDoubleClick={() =>
-                                        handleDoubleClick(index)
-                                      }
-                                    >
-                                      <RadioInput
-                                        type="radio"
-                                        value={option.id}
-                                        checked={correct_answer === option.id}
-                                        onChange={handleOptionChange}
-                                      />
-                                      {option.label}
-                                    </Label>
-                                  )}
-                                </OptionsContainer>
-                              ))}
-                            </div>
-                          )}
+                            </OptionsContainer>
+                          ))}
                         </div>
-                      ) : null
-                    )}
-                  </div>
-                ))}
-                <Box
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    margin: " 20px 150px",
-                    alignItems: "flex-end",
-                  }}
-                >
-                  <WhiteBtn
-                    color="inherit"
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    sx={{ mr: 1 }}
-                  >
-                    Back
-                  </WhiteBtn>
+                      )}
+                    </div>
+                  ) : null
+                )}
+              </div>
+            ))}
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                margin: " 20px 150px",
+                alignItems: "flex-end",
+              }}
+            >
+              <WhiteBtn
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
+                Back
+              </WhiteBtn>
 
-                  <Box sx={{ flex: "1 1 auto" }} />
+              <Box sx={{ flex: "1 1 auto" }} />
 
-                  <BlackBtn
-                    style={{ padding: "10px 16px" }}
-                    onClick={handleNext}
-                  >
-                    Next
-                  </BlackBtn>
-                </Box>
-              </>
-            )}
+              <BlackBtn style={{ padding: "10px 16px" }} onClick={handleNext}>
+                Next
+              </BlackBtn>
+            </Box>
+          </>
+        )}
 
-            {activeStep === 2 && (
-              <>
-                <Header>Finished ?</Header>
-                <TextSub style={{ width: "70%", margin: "20px 100px" }}>
-                  If you finished creating the content of the course, you can
-                  click on "Create".
-                </TextSub>
-                <Box
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    margin: " 20px 150px",
-                    alignItems: "flex-end",
-                  }}
-                >
-                  <WhiteBtn
-                    color="inherit"
-                    disabled={activeStep === 0}
-                    onClick={handleBack}
-                    sx={{ mr: 1 }}
-                  >
-                    Back
-                  </WhiteBtn>
+        {activeStep === 2 && (
+          <>
+            <Header>Finished ?</Header>
+            <TextSub style={{ width: "70%", margin: "20px 100px" }}>
+              If you finished creating the content of the course, you can click
+              on "Create".
+            </TextSub>
+            <Box
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                margin: " 20px 150px",
+                alignItems: "flex-end",
+              }}
+            >
+              <WhiteBtn
+                color="inherit"
+                disabled={activeStep === 0}
+                onClick={handleBack}
+                sx={{ mr: 1 }}
+              >
+                Back
+              </WhiteBtn>
 
-                  <Box sx={{ flex: "1 1 auto" }} />
+              <Box sx={{ flex: "1 1 auto" }} />
 
-                  <BlackBtn
-                    style={{ padding: "10px 16px" }}
-                    onClick={handleSubmit}
-                  >
-                    Create
-                  </BlackBtn>
-                </Box>
-              </>
-            )}
-            {activeStep === steps.length ? (
-              <>
-                <Typography sx={{ mt: 2, mb: 1 }}>
-                  All steps completed - you&apos;re finished
-                </Typography>
-                <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-                  <Box sx={{ flex: "1 1 auto" }} />
-                  <Button onClick={handleReset}>Reset</Button>
-                </Box>
-              </>
-            ) : (
-              <>
-                {/* <Box
+              <BlackBtn style={{ padding: "10px 16px" }} onClick={handleSubmit}>
+                Create
+              </BlackBtn>
+            </Box>
+          </>
+        )}
+        {activeStep === steps.length ? (
+          <>
+            <Typography sx={{ mt: 2, mb: 1 }}>
+              All steps completed - you&apos;re finished
+            </Typography>
+            <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+              <Box sx={{ flex: "1 1 auto" }} />
+              <Button onClick={handleReset}>Reset</Button>
+            </Box>
+          </>
+        ) : (
+          <>
+            {/* <Box
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -660,9 +662,9 @@ const id= 1;
                     {activeStep === steps.length - 1 ? "Finish" : "Next"}
                   </BlackBtn>
                 </Box> */}
-              </>
-            )}
-          </Box> 
+          </>
+        )}
+      </Box>
     </div>
   );
 };

@@ -50,10 +50,55 @@ if (err) {
       if (err) 
        return res.json({ status: err });
   
-      res.json({ status:'success', message: 'Job created successfully'  });
+      res.json({ status:'success', message: 'Job created successfully' });
     });
   };
 
+  const postJobChallenge = (req, res) => {
+    const stmt =
+      'INSERT INTO challenge_submission set ? ';
+ 
+    const jobData = req.body;
+  
+  
+    connection.query(stmt,[jobData], (err, data) => {
+      if (err) 
+       return res.json({ status: err });
+  
+      res.json({ status:'success', message: 'Job challenge submitted successfully' });
+    });
+  };
+
+  const getJobById= (req, res) => {
+    const stmt =
+      'select * from job_offer where jobOfferID= ? ';
+  
+    const jobData = req.params.id;
+ 
+  
+    connection.query(stmt,[jobData], (err, data) => {
+      if (err) 
+       return res.json({ status: err });
+  
+      res.json({ status:'success', message: 'Job created successfully' , data:data[0]});
+    });
+  };
+
+
+  const getJobChallenges= (req, res) => {
+    const stmt =
+      'select * from challenge_content where challenge=(select challenge from job_offer where jobOfferID=?) ';
+  
+    const jobData = req.params.id;
+ 
+  
+    connection.query(stmt,[jobData], (err, data) => {
+      if (err) 
+       return res.json({ status: err });
+  
+      res.json({ status:'success', message: 'Job fetched successfully' , data:data});
+    });
+  };
 
 const getParticipants = (req, res) => {
   const stmt =
@@ -101,4 +146,4 @@ const getAllJobsbyid= (req, res) => {
 };
 
 
-module.exports = { postJob , getAllJobs, getAllJobsbyid};
+module.exports = { postJob ,postJobChallenge, getAllJobs, getAllJobsbyid,getJobById,getJobChallenges};

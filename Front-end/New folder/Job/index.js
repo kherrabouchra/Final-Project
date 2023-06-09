@@ -7,7 +7,7 @@ import { JobDetails1, JobDetails2, JobElement, JobState, JobTitle, JobsContainer
 import api from '../../api/api'
 import { useState } from 'react'
 import { useEffect } from 'react'
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 
@@ -17,28 +17,27 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Jobs = () => {
   let jobsList = "radial-gradient(228.87% 1055.55% at 100% 0%, #FFC8F8 0%, #C9C8FF 23.44%, #83B3FF 99.99%, #83B3FF 100%) "
-  const loc= useLocation()
-  const user= loc.state;
+
   const [jobs, setJobs] = useState([])
   const navigate = useNavigate();
-useEffect(()=>{
-api.get('/job')
-  .then( 
+
+api.get('/job');
+  then( 
       (res)=>{
 
         console.log(res.data);
-        if (res.data.status === 'success') {
-          setJobs(res.data.data)
+        if (jobsData.data.status === 'success') {
+          setJobs(jobsData.data.data)
 
-  console.log(jobs)
       } 
       })
     .catch( (err)=>  console.log(`Error: ${err.message}`));
    
   const handleButtonClick = (id) => {
-    navigate(`/jobs/${id}`, {state:user});
+    navigate(`/jobs/${id}`);
   };
-}, [])
+
+  console.log(jobs)
   
 
   return (
@@ -62,14 +61,14 @@ api.get('/job')
                   <Paragraph>{job.onSite}</Paragraph>
                 </JobDetails1>
                 <JobDetails2>
-                  <Jobsalary>{job.salary} DA</Jobsalary>
+                  <Jobsalary>{job.salary}$</Jobsalary>
                   {job.state === 'closed' ? (
                     <JobState style={{ color: 'red' }}>{job.state}</JobState>
                   ) : (
                     <JobState style={{ color: 'green' }}>{job.state}</JobState>
                   )}
                   <PurpleBtn style={{ width: "100px" }}>
-                    <WhiteLink to={`/jobs/${job.jobOfferID}`} state={user}>See details
+                    <WhiteLink to={`/jobs/${job.jobOfferID}`}>See details
                     </WhiteLink>
                   </PurpleBtn>
                   {/* <PurpleBtn style={{ width: "100px" }} onClick={handleButtonClick}>
