@@ -17,6 +17,26 @@ import { Code, Tabs } from "@mantine/core";
 import { renderToString } from "react-dom/server";
 import { MdArrowBack } from "react-icons/md";
 import { BlurContainer, FinishContainer } from "./styles";
+import { RichTextEditor, Link } from "@mantine/tiptap";
+import { useEditor } from "@tiptap/react";
+
+import { Children } from "react";
+
+import { Group, Text, useMantineTheme, rem } from "@mantine/core";
+import { IconUpload, IconPhoto, IconX } from "@tabler/icons-react";
+import { Dropzone, DropzoneProps, IMAGE_MIME_TYPE } from "@mantine/dropzone";
+import { Input } from "@nextui-org/react";
+import StarterKit from "@tiptap/starter-kit";
+import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import { lowlight } from "lowlight";
+import tsLanguageSyntax from "highlight.js/lib/languages/typescript";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import { Image } from "@mantine/core";
+import Superscript from "@tiptap/extension-superscript";
+import SubScript from "@tiptap/extension-subscript";
+import Highlight from "@tiptap/extension-highlight";
+import Notebook from "./Notebook";
 
 const HcktPrtcp = ({ user, log }) => {
   const [error, setError] = useState("");
@@ -178,6 +198,55 @@ const HcktPrtcp = ({ user, log }) => {
     return () => clearInterval(timer);
   }, [hackathon.end]);
 
+  lowlight.registerLanguage("ts", tsLanguageSyntax);
+  const codeExample =
+    escapeHtml(`// Valid braces Kata - https://www.codewars.com/kata/5277c8a221e209d3f6000b56
+
+      const pairs: Record<string, string> = {
+        '[': ']',
+        '{': '}',
+        '(': ')',
+      };
+
+      const openBraces = Object.keys(pairs);
+ 
+  `);
+  const [editorContent, setEditorContent] = useState(
+    `<p>Regular paragraph</p><pre><code>${codeExample}</code></pre>`
+  );
+  const editor = useEditor({
+    extensions: [
+      Link,
+      Image,
+      StarterKit,
+      CodeBlockLowlight.configure({
+        lowlight,
+        Underline,
+        Superscript,
+        SubScript,
+        Highlight,
+      }),
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+    ],
+    content: editorContent,
+    onUpdate() {
+      setEditorContent(editor.getHTML());
+    },
+  });
+
+  function escapeHtml(unsafe) {
+    return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+  /* const handleEditorChange = (index, value) => {
+    setRichTextValues((prev) =>
+      prev.map((v, idx) => (idx === index ? value : v))
+    );
+  }; */
   return (
     <>
       <Banner color={"black"} style={{ display: "flex" }}>
@@ -199,33 +268,37 @@ const HcktPrtcp = ({ user, log }) => {
           </TextSub>
         </TextWrapper>
       </Banner>
-      <Container style={{ height: "100vw" }}>
-        <h1>Problem</h1>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            lineHeight: "2.4rem",
-            padding: "0 30px",
-            justifyContent: "space-around",
-          }}
-          dangerouslySetInnerHTML={{
-            __html: renderQuestion(hackathon.question),
-          }}
-        ></div>
-        <h2>Good Luck!</h2>
-        <h1>Answer</h1>
-        <TextField
-          fullWidth
-          label="Answer"
-          id="bg"
-          style={{ margin: "20px" }}
-          multiline
-          onChange={(e) => setInput(e.target.value)}
-          value={input}
-          rows={10}
-        />
-
+      <Container>
+        <div style={{ display: "flex" }}>
+          <div style={{ marginRight: "25px"}}>
+            <h1>Problem</h1>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                lineHeight: "2.4rem",
+                padding: "0 30px",
+                justifyContent: "space-around",
+              }}
+              dangerouslySetInnerHTML={{
+                __html: renderQuestion(hackathon.question),
+              }}
+            ></div>
+            <h2>Good Luck!</h2>
+            <h1>Answer</h1>
+            <TextField
+              fullWidth
+              label="Answer"
+              id="bg"
+              style={{ margin: "20px" }}
+              multiline
+              onChange={(e) => setInput(e.target.value)}
+              value={input}
+              rows={10}
+            />
+          </div>
+          <Notebook hackathon={hackathon} />
+        </div>
         {submitted ? (
           <BlurContainer>
             <FinishContainer>
