@@ -333,15 +333,29 @@ const Hackathon = (data) => {
                 <p>Prize: </p>
               </div>
             </div>
-            {/* {timeLeft === 0 && ( */}
-            <BlackBtn>
-              <Link
-                to={`/Compete/hackathon/${data.data.challengeID}/participate`}
-                style={{ color: "white" }}
-              >
-                Participate
-              </Link>
-            </BlackBtn>
+            {/* {isRegistered && ( */}
+              <>
+                <TextSub
+                  style={{
+                    color: "black",
+                    textAlign: "center",
+                    fontWeight: 700,
+                    fontSize: "20px",
+                  }}
+                >
+                  Come back on the day of the hackathon to participate.
+                </TextSub>
+                {/* {timeLeft === 0 && ( */}
+                <BlackBtn>
+                  <Link
+                    to={`/Compete/hackathon/${data.data.challengeID}/participate`}
+                    style={{ color: "white" }}
+                  >
+                    Participate
+                  </Link>
+                </BlackBtn>
+                {/* )} */}
+              </>
             {/* )} */}
           </div>
         </div>

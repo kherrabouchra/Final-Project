@@ -1,29 +1,87 @@
 import React, { useEffect, useState } from "react";
-import { Banner, BlackBtn, Container, TextSub } from "../../../Global/GlobalComponents";
+import {
+  Banner,
+  BlackBtn,
+  CheckBox,
+  Container,
+  SubHeader,
+  TextSub,
+  WhiteBtn,
+} from "../../../Global/GlobalComponents";
 import { TextField } from "@mui/material";
 import api from "../../../../api/api";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CourseTitle } from "../../../Course/Details/CourseElements";
 import { TextWrapper } from "../../../HeroSection/HeroElements";
 import { Code, Tabs } from "@mantine/core";
 import { renderToString } from "react-dom/server";
+import { MdArrowBack } from "react-icons/md";
+import { BlurContainer, FinishContainer } from "./styles";
 
-const HcktPrtcp = () => {
+const HcktPrtcp = ({ user, log }) => {
+  const [error, setError] = useState("");
   const [hackathon, setHackathon] = useState({});
+  const [input, setInput] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const [timeLeft, setTimeLeft] = useState("");
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const fetchHackathon = async () => {
     api
       .get(`/hackathons/${id}`)
       .then((res) => {
         if (res.status === 200) {
-            setHackathon(res.data);
+          setHackathon(res.data);
         }
       })
       .catch((err) => console.log(err));
   };
 
-  console.log(hackathon)
+  console.log(hackathon);
+
+  const handleAnswer = async () => {
+    try {
+      const data = {
+        developerID: user.userID,
+        challengeID: hackathon.challengeID,
+        input: input,
+      };
+      const submission = await api.post(
+        `/hackathons/submission/${hackathon.challengeID}`,
+        data
+      );
+
+      console.log(submission);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleClick = () => {
+    const isValid = validateForm();
+    if (isValid && timeLeft !== 0) {
+      handleAnswer();
+      setSubmitted(true);
+    }
+  };
+
+  const handleRedirect = () => {
+    navigate("/");
+  };
+
+  const validateForm = () => {
+    if (!input) {
+      setError("Please answer the question before submitting!");
+      return false; // Return false to indicate the form is invalid
+    }
+    if(timeLeft === 0) {
+      setError("The hackathon is over, therefore u cannot submit your answer!")
+      return false;
+    }
+    
+    return true; // Return true to indicate the form is valid
+  };
 
   function renderQuestion(question) {
     const html = question;
@@ -58,17 +116,59 @@ const HcktPrtcp = () => {
     fetchHackathon();
   }, []);
 
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const currentTime = new Date().getTime();
+      const endTimeParts = hackathon.end.split(":");
+      const targetTime = new Date();
+      targetTime.setHours(parseInt(endTimeParts[0], 10));
+      targetTime.setMinutes(parseInt(endTimeParts[1], 10));
+      targetTime.setSeconds(parseInt(endTimeParts[2], 10));
+      const difference = targetTime.getTime() - currentTime;
+
+      if (difference > 0) {
+        // Calculate the remaining hours
+        const hours = Math.floor(difference / (1000 * 60 * 60));
+        const minutes = Math.floor(
+          (difference % (1000 * 60 * 60)) / (1000 * 60)
+        );
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        const timeLeftString = `${hours}h ${minutes}m ${seconds}s`;
+
+        setTimeLeft(timeLeftString);
+      } else {
+        // If the end time has passed, set the remaining hours to 0
+        setTimeLeft(0);
+      }
+    };
+
+    // Update the time left every second
+    const timer = setInterval(() => {
+      calculateTimeLeft();
+    }, 1000);
+    // Clean up the timer when the component is unmounted
+    return () => clearInterval(timer);
+  }, [hackathon.end]);
+
   return (
     <>
       <Banner color={"black"} style={{ display: "flex" }}>
         <TextWrapper style={{ flex: 1, margin: "45px 99px" }}>
-          <CourseTitle color={"white"} title={`${hackathon.name} Hackathon`} style={{ width: "80vw" }} />
+          <CourseTitle
+            color={"white"}
+            title={`${hackathon.name} Hackathon`}
+            style={{ width: "80vw" }}
+          />
           <TextSub style={{ color: "white", margin: 0 }}>
             Answer the following question(s) before the time is up. Good luck!
           </TextSub>
-          <br/>
+          <br />
           <TextSub style={{ color: "white", margin: 0 }}>
-            Timer
+            <h3>Time left: {timeLeft}</h3>
+          </TextSub>
+          <TextSub style={{ color: "white", margin: 0 }}>
+            End Time: {hackathon.end}
           </TextSub>
         </TextWrapper>
       </Banner>
@@ -94,12 +194,38 @@ const HcktPrtcp = () => {
           id="bg"
           style={{ margin: "20px" }}
           multiline
-          /* onChange={(e) => setHackathon(hackathon.solution)}
-          value={hackathon.solution} */
+          onChange={(e) => setInput(e.target.value)}
+          value={input}
           rows={10}
         />
 
-        <BlackBtn style={{ width: "5%" }}>Submit</BlackBtn>
+        {submitted ? (
+          <BlurContainer>
+            <FinishContainer>
+              <SubHeader style={{ textAlign: "center" }}>
+                Congrats! Your submission has been saved.
+              </SubHeader>
+              <TextSub
+                style={{
+                  color: "black",
+                  textAlign: "center",
+                  marginTop: "40px",
+                }}
+              >
+                Your results will be posted soon!
+              </TextSub>
+              <CheckBox></CheckBox>
+              <WhiteBtn onClick={handleRedirect}>
+                <MdArrowBack /> Go back to dashboard
+              </WhiteBtn>
+            </FinishContainer>
+          </BlurContainer>
+        ) : (
+          <BlackBtn style={{ width: "5%" }} onClick={handleClick}>
+            Submit
+          </BlackBtn>
+        )}
+        <div className="errmsg">{error}</div>
       </Container>
     </>
   );
