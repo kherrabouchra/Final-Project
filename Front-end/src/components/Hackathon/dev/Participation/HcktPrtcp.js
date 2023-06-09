@@ -24,6 +24,8 @@ const HcktPrtcp = ({ user, log }) => {
   const [input, setInput] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState("");
+  const [isCorrect, setIsCorrect] = useState(false);
+  const [points, setPoints] = useState(0);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -58,13 +60,38 @@ const HcktPrtcp = ({ user, log }) => {
     }
   };
 
+  const addPoints = async () => {
+    try {
+      const data = {
+        devID: user.userID,
+        points: hackathon.points,
+      };
+
+      const pointsAdded = await api.put(`user/addPoints/${user.userID}`, data);
+
+      console.log(pointsAdded.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+
   const handleClick = () => {
     const isValid = validateForm();
     if (isValid && timeLeft !== 0) {
       handleAnswer();
+      const isCorrect = hackathon.solution === input;
+      setIsCorrect(isCorrect);
+      if (isCorrect) {
+        addPoints();
+      }
       setSubmitted(true);
     }
   };
+
+  console.log(input);
+  console.log(hackathon.solution);
+  console.log(points);
+  console.log(isCorrect);
 
   const handleRedirect = () => {
     navigate("/");
@@ -75,11 +102,11 @@ const HcktPrtcp = ({ user, log }) => {
       setError("Please answer the question before submitting!");
       return false; // Return false to indicate the form is invalid
     }
-    if(timeLeft === 0) {
-      setError("The hackathon is over, therefore u cannot submit your answer!")
+    if (timeLeft === 0) {
+      setError("The hackathon is over, therefore u cannot submit your answer!");
       return false;
     }
-    
+
     return true; // Return true to indicate the form is valid
   };
 
@@ -203,9 +230,9 @@ const HcktPrtcp = ({ user, log }) => {
           <BlurContainer>
             <FinishContainer>
               <SubHeader style={{ textAlign: "center" }}>
-                Congrats! Your submission has been saved.
+                Thank you for participating!
               </SubHeader>
-              <TextSub
+              {/* <TextSub
                 style={{
                   color: "black",
                   textAlign: "center",
@@ -213,7 +240,13 @@ const HcktPrtcp = ({ user, log }) => {
                 }}
               >
                 Your results will be posted soon!
-              </TextSub>
+              </TextSub> */}
+              <br />
+              <SubHeader style={{ textAlign: "center", fontSize: "35px" }}>
+                Your score is:
+                <br />
+                {isCorrect ? hackathon.points : 0}
+              </SubHeader>
               <CheckBox></CheckBox>
               <WhiteBtn onClick={handleRedirect}>
                 <MdArrowBack /> Go back to dashboard
