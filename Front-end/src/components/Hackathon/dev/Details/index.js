@@ -333,7 +333,7 @@ const Hackathon = (data) => {
                 <p>Prize: </p>
               </div>
             </div>
-            {/* {isRegistered && ( */}
+            {isRegistered && (
               <>
                 <TextSub
                   style={{
@@ -345,7 +345,7 @@ const Hackathon = (data) => {
                 >
                   Come back on the day of the hackathon to participate.
                 </TextSub>
-                {/* {timeLeft === 0 && ( */}
+                {timeLeft === 0 && (
                 <BlackBtn>
                   <Link
                     to={`/Compete/hackathon/${data.data.challengeID}/participate`}
@@ -354,9 +354,9 @@ const Hackathon = (data) => {
                     Participate
                   </Link>
                 </BlackBtn>
-                {/* )} */}
+                )}
               </>
-            {/* )} */}
+            )}
           </div>
         </div>
       </Container>
