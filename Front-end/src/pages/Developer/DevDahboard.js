@@ -8,30 +8,15 @@ const DevDahboard = () => {
     const location = useLocation();
     const [data, setData]= useState(''); 
     const [id, setId] = useState('');   
-
-  useEffect(() => {
-    if (location.state) {
-      setId(location.state.id);
-    }
-  }, [location.state]);
-
-   
-	useEffect(( ) => {   
-	 	api.get(`/user/${id}`) 
+    const user= location.state;
   
-		.then(res => {
-      setData(res.data.data[0]);
-    }
-    )
-		.catch(err => console.log(err));
-	},[ id]
-
-  )
+   
+	  
   return (
     <div>
-   <NavBarDev data={data} />
+   <NavBarDev data={user} />
     
-    <Dashboard data={data}/>
+    <Dashboard  />
     <Footer/>   
     </div>
   )

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom' 
-import { BookLayer, Header, SubHeader, TextSub, P,HorizontalSeparator , Banner, TiltedArrow, CircleDoodle, UnCheckBox} from '../Global/GlobalComponents'
+import { BookLayer, Header, SubHeader, TextSub, P,HorizontalSeparator , Banner, TiltedArrow, CircleDoodle, UnCheckBox, CheckBox, Checked} from '../Global/GlobalComponents'
 import { DashboardContainer, JobsLinkContainer, LevelContainer, LevelWrap, Points, SectionTextWrap } from './DashboardElements'
 import { NavBarDev } from '../NavBar/index-2'
 import { DashboardTextWrapper, StreakContainer ,Streak, 
@@ -18,7 +18,7 @@ import { useFetch } from '../useFetch'
 import axios, { all } from 'axios'
 import { dark } from '@mui/material/styles/createPalette'
 import api from '../../api/api'
-const Dashboard = (props) => {
+const Dashboard = () => {
 
   const [courses, setCourses] = useState([]);
   const[lessons, setLessons]=useState('')
@@ -32,6 +32,7 @@ const [user , setUser]=useState('')
   const hackathonsExist = hackathons && hackathons.length > 0;
   const notificationsExist = notifications &&  notifications.length > 0;
   const [enrolled, setEnrolled]=useState([])
+  const[streak, setStreak]=useState(0)
   const location = useLocation();
   const state = location.state;   
 console.log(state);
@@ -61,6 +62,16 @@ api.get(`/user/${state.userID}`)
         }
       })
       .catch((err) => console.log(err));
+
+      api.get(`/user/dev/streak/${user.userID}`)
+      .then((res)=>{ console.log(res.data);
+        if(res.data.status==="success"){
+         
+          setStreak(res.data.data[0].streak)
+      console.log("streak",streak);
+
+        }
+      })
   }, [user]);
   
 
@@ -225,20 +236,50 @@ const currentPoints =  user.points;
         </LevelContainer>
         <StreakContainer><DashboardTextWrapper><P style={{marginLeft: '80%'}}> {user&&  7- user.streak} days left.</P><h1>Daily streak</h1>
         <P>Stay active to maintain your streak.</P></DashboardTextWrapper>
-        <Streak>
-          <StreakDayWrap><StreakDay><P>sat</P><StreakIcon><UnCheckBox/></StreakIcon></StreakDay>  </StreakDayWrap>
-          <StreakDayWrap><StreakDay><P>sun</P><StreakIcon><UnCheckBox/></StreakIcon></StreakDay>  </StreakDayWrap>
-
-          <StreakDayWrap><StreakDay><P>mon</P><StreakIcon><UnCheckBox/></StreakIcon></StreakDay>  </StreakDayWrap>
-
-          <StreakDayWrap><StreakDay><P>tue</P><StreakIcon><UnCheckBox/></StreakIcon></StreakDay>  </StreakDayWrap>
-
-          <StreakDayWrap><StreakDay><P>wed</P><StreakIcon><UnCheckBox/></StreakIcon></StreakDay>  </StreakDayWrap>
-
-          <StreakDayWrap><StreakDay><P>thu</P><StreakIcon><UnCheckBox/></StreakIcon></StreakDay>  </StreakDayWrap>
-
-          <StreakDayWrap><StreakDay><P>fri</P><StreakIcon><UnCheckBox/></StreakIcon></StreakDay>  </StreakDayWrap>
-
+      <Streak> 
+          
+          <StreakDayWrap>
+  <StreakDay>
+    <P>sat</P>
+    <StreakIcon>{streak && streak>= 1 ? <Checked /> : <UnCheckBox />}</StreakIcon>
+  </StreakDay>
+</StreakDayWrap>
+<StreakDayWrap>
+  <StreakDay>
+    <P>sun</P>
+    <StreakIcon>{streak && streak >= 2 ? <Checked /> : <UnCheckBox />}</StreakIcon>
+  </StreakDay>
+</StreakDayWrap>
+<StreakDayWrap>
+  <StreakDay>
+    <P>mon</P>
+    <StreakIcon>{streak && streak >= 3 ? <Checked /> : <UnCheckBox />}</StreakIcon>
+  </StreakDay>
+</StreakDayWrap>
+<StreakDayWrap>
+  <StreakDay>
+    <P>tue</P>
+    <StreakIcon>{streak && streak >= 4 ? <Checked /> : <UnCheckBox />}</StreakIcon>
+  </StreakDay>
+</StreakDayWrap>
+<StreakDayWrap>
+  <StreakDay>
+    <P>wed</P>
+    <StreakIcon>{ streak && streak >= 5 ? <Checked /> : <UnCheckBox />}</StreakIcon>
+  </StreakDay>
+</StreakDayWrap>
+<StreakDayWrap>
+  <StreakDay>
+    <P>thu</P>
+    <StreakIcon>{ streak && streak >= 6 ? <Checked /> : <UnCheckBox />}</StreakIcon>
+  </StreakDay>
+</StreakDayWrap>
+<StreakDayWrap>
+  <StreakDay>
+    <P>fri</P>
+    <StreakIcon>{ streak && streak >= 7 ? <Checked /> : <UnCheckBox />}</StreakIcon>
+  </StreakDay>
+</StreakDayWrap>
 
           </Streak></StreakContainer> 
 

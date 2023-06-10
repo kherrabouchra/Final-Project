@@ -67,7 +67,7 @@ const [answer, setAnswer]= useState({
   }, [id]);
 
   useEffect(() => {
-    AOS.init({ duration: 2000 });
+    AOS.init({ duration: 1500 });
   }, []);
 
   const handleQuizSubmission = () => {
@@ -246,7 +246,12 @@ useEffect(() => {
                 {formatTime(totalTime - elapsedTime)}
                 </Typography>
               </Box>
-            </Box></> : <h3 style={{    color:"white"}}>Completed in: {answer.time>60 ? `${answer.time/60} minutes`:  `${answer.time} seconds`}</h3>}</>}
+            </Box></> :<div style={{display:"flex", color:"white", flexDirection:'column'}}> 
+            <h1 >Completed in: </h1><h3 >  {answer.time >= 60
+      ? `${Math.floor(answer.time / 60)} minutes ${
+          answer.time % 60 !== 0 ? `${answer.time % 60} seconds` : ""
+        }`
+      : `${answer.time} seconds`}</h3></div>}</>}
           </div>
 
 
@@ -259,9 +264,9 @@ useEffect(() => {
        {  !result ? (<> <Grid>
               <Progress
               id='quizbar' size="md" value={challenge ? ((currentChallengeIndex + 1) / challenge.length) * 100 : 0}
-              /> <P>{currentChallengeIndex} / {challenge.length}</P>
+              /> <P style={{marginTop:"8px"}}>{currentChallengeIndex} / {challenge.length}</P>
             </Grid> 
-            <Parag>{currentChallenge.question}</Parag>
+            <p style={{fontSize:"20px"}}>{currentChallenge.question}</p>
             <Grid>
               <Radio.Group label="Select an answer:" color="secondary" value={checked} onChange={setChecked}>
                

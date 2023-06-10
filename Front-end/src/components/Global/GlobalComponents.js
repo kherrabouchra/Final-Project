@@ -334,6 +334,15 @@ background: ${(props)=>(props.color)};
   )
  }
 
+ export const Checked= ()=>{
+
+  return(<svg  width="37" height="38" viewBox="0 0 47 48" fill="none"  xmlns="http://www.w3.org/2000/svg">
+  <circle cx="23.5" cy="24.1758" r="23.5" fill="#F989E6"/>
+  <path d="M14.3999 25.5624L19.5999 31.1094L32.5999 17.2419" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  
+  )
+ }
 
  export const UnCheckBox= ()=>{
   return(

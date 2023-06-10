@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken')
 
 router.get('/:id', userController.getDevById) 
 router.get('/', userController.getUsers)
+router.get('/dev/streak/:id', userController.getStreak)
+
 router.put('/:id',userController.updateUser )
 router.post('/', userController.createUser)
 router.delete('/:id', userController.deleteUser)

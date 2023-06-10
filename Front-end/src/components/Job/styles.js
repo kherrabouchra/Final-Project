@@ -28,16 +28,18 @@ export const Paragraph = styled.p`
        
 `
 export const JobDetails2 = styled.div`
-
+display:flex;
+flex-direction:column;
 
 `
 export const JobsContainer = styled.div`
         display:flex;
         justify-content: space-between;
+        align-items:center;
 
 `
 export const Jobsalary = styled.p`
-        font-size: 1.3rem;
+        font-size: 1.8rem;
         font-weight: bold;
         margin: 0 auto;
         text-align: center;

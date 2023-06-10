@@ -49,6 +49,24 @@ exports.getUserById =  (req, res) => {
  );
 }
 
+exports.getStreak =  (req, res) => {
+  if (!req.params.id) {
+    return ( res.json({Error:"Not found"}));
+  }
+  connection.query(
+    'SELECT streak FROM developer WHERE developerID = ? ',
+    [req.params.id],
+    function (err, data, fields) {
+      if (err) 
+    return ( res.json({Error:"Not found"}));
+      res.json({
+        status: "success",
+        data: data,
+      });
+    }
+  );
+ }
+
 exports.getCurrentUser = () => {
   return JSON.parse(localStorage.getItem("user"));
 };

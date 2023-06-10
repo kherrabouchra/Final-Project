@@ -310,7 +310,7 @@ const CreateJobeOffer = () => {
 
      
            const checkFieldsData =(data)=>{
-            const credentials = !data.name || !data.description  || !data.level || !data.duration ;
+            const credentials = !data.name || !data.description  || !data.level   ;
             if (credentials) {
               setError("Please fill all the required fields");
               return false;
@@ -323,6 +323,8 @@ const CreateJobeOffer = () => {
               event.preventDefault(); // Prevent the default form submission behavior
             
               if (activeStep === 0) {
+
+      
                 const formData = {
                   title,
                   skills,
@@ -358,31 +360,39 @@ const CreateJobeOffer = () => {
             };
         console.log(user);
     const handleSubmit = (e) => { 
+      setData({...data, creator:user.userID})
       e.preventDefault();
-      console.log("sub");
-          const formData = {
-              title,
-              skills,
-              recruiter: user.userID,
-              company,
-              country,
-              city,
-              address,
-              description,
-              onSite,
-              additional_info,
-              terms,
-              duration,
-              experience,
-              salary, 
-              creationDate: dayjs( new Date()).format('YYYY-MM-DD HH:MM'),
-  
-          };
-     
-        api.post('/Job', formData)
+        
+        
+                      api.post('/hackathons/job', data)
+                      .then((r)=>{
+                        console.log(r.data);
+                                  if(r.data.status==="success"){
+                                    console.log(r.data.message); 
+                                    
+                                    const formData = {
+                                      title,
+                                      challenge:r.data.id,
+                                      skills,
+                                      recruiter: user.userID,
+                                      company,
+                                      country,
+                                      city,
+                                      address,
+                                      description,
+                                      onSite,
+                                      additional_info,
+                                      terms,
+                                      duration,
+                                      experience,
+                                      salary, 
+                                      creationDate: dayjs( new Date()).format('YYYY-MM-DD HH:MM'),
+                          
+                                  };
+                             
+                                    api.post('/Job',  formData)
             .then((response) => { console.log(response.data);
                 if(response.data.status==='success'){
-                  setData({...data, creator:user.userID})
 
                     console.log('Job offer added successfully!');
                
@@ -390,12 +400,11 @@ const CreateJobeOffer = () => {
                 }
 
 
-                      api.post('/hackathons/job', data)
-                      .then((r)=>{
-                        console.log(r.data);
-                                  if(r.data.status==="success"){
-                                    console.log(r.data.message); 
-                                     
+               
+            })
+            .catch((error) => {
+                console.error('Error adding job offer:', error); 
+            });
                                     questions.forEach((q) => {
                                      
                                     api.post('/hackathons/challenge_question', {id: r.data.id, question: q.question,
@@ -410,11 +419,6 @@ const CreateJobeOffer = () => {
                       }).catch((err)=>console.log(err))
 
                     
-               
-            })
-            .catch((error) => {
-                console.error('Error adding job offer:', error); 
-            });
     };
 
   
@@ -590,10 +594,7 @@ const CreateJobeOffer = () => {
       </Radio.Group>
     </Grid> 
     </Grid.Container>
-    <div style={{display:'flex',   justifyContent:"flex-start", margin:' 0 24px'}}>
-    <NumberInput  onChange={(value) => setData({...data, duration:  value})} 
-                 value={data.duration}  label="Duration(mins)" />
-    </div>
+   
      
      {error && <div className='errmsg'>{error}</div>}
     </Box>
@@ -606,7 +607,7 @@ const CreateJobeOffer = () => {
   <>{!success &&<>
     <Header>Job challenge</Header>
     <TextSub style={{ width: '70%', margin: '20px 100px' }}>
-      Add a variety of quizzes to your challenge.
+      Add a variety of questions to your challenge.
     </TextSub>
 
     <div
@@ -632,16 +633,16 @@ const CreateJobeOffer = () => {
           }}
         >
           <h3 style={{ color: '#F989E6', margin: '10px' }}>
-            Click to add quizzes.
+            Click to add questions.
           </h3>
         </div>
       )}
 
-      <BlackBtn onClick={addQuestion}>+ Quiz</BlackBtn>
+      <BlackBtn onClick={addQuestion}>+ Question</BlackBtn>
 </div>
       {questions.map((q, index) => (
         <div key={index} style={{width:"90"}}>
-          <h2 style={{ margin: '30px' }}>Quiz {index + 1}</h2>
+          <h2 style={{ margin: '30px' }}>Question {index + 1}</h2>
 
           <NumberInput
             bordered
@@ -654,7 +655,7 @@ const CreateJobeOffer = () => {
 
           <TextField
             fullWidth
-            label="Quiz text"
+            label="Question text"
             id={`question-${index}`}
             style={{ margin: '20px' }}
             multiline
@@ -664,7 +665,7 @@ const CreateJobeOffer = () => {
           />
 
 {q.choices.map((choice, choiceIndex) => (
-            <div key={choiceIndex} style={{margin:"20px", width:'40%'}}>
+            <div key={choiceIndex} style={{margin:"20px", width:'50%'}}>
               <TextField
                 label={`Choice ${choiceIndex + 1}`}
                 value={choice}

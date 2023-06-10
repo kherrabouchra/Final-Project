@@ -26,7 +26,7 @@ exports.getNotifications =  (req, res, next)  => {
        length: data?.length,
        data: data,
        
-     }); 
+     });  
    });
    };
    exports.getNotificationsDev =  (req, res, next)  => {

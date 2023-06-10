@@ -56,6 +56,7 @@ import Createjoboffer from './pages/Recruiter/CreateJobofferPage';
 import HackathonParticipation from './pages/Developer/HackathonParticipation';
 import JobsDetailsPage from './pages/Developer/JobsDetailsPage';
 import JobChallenge from './components/Job/JobsDetails/JobChallenge';
+import AnalystDashboard from './pages/analystDashboard';
 
 function App( ) {
   const [loginStatus, setLoginStatus]=useState('')
@@ -144,7 +145,7 @@ if (loading) {
         <Route path="/Jobs" element={<JobsPage />} />
         <Route path="/Jobs/:id" element={<JobsDetailsPage />} />
         <Route path="/Jobs/:id/challenge" element={<JobChallenge />} />
-
+        <Route path="/Compete/hackathon/:id/participate" element={<HackathonParticipation user={loginStatus.user} log={loginStatus.loggedIn} />} />
         <Route path="/dashboard" element={<DevDahboard />} />
         <Route path="/instructor/:id" element={<InstructorDashPage />} />
         <Route path="/instdash/courses" element={<CourseManagamentPage />} />
@@ -170,7 +171,7 @@ if (loading) {
         <Route path='/recdashboard' element={<RecruiterDashboard/>}/>
         <Route path='/joboffers' element={<JobOfferManage/>}/>
         <Route path='/joboffers/new' element={<Createjoboffer/>}/>
-
+         <Route path='analyst' element={<AnalystDashboard/>}/>
         <Route path='/candidates' element={<CandidatesPage/>}/>
 
         <Route path="/DashboardRedirect" element={<DashboardPage user={loginStatus.user} log={loginStatus.loggedIn}/>} />

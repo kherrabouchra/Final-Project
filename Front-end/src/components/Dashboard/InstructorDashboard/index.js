@@ -9,12 +9,11 @@ import api from '../../../api/api'
  
 const InstructorDash = (props) => {
   const {data}= props
-  console.log(data );
   const [schedule, setSchedule]= useState('');
-
+  
   useEffect(()=>{
    api.get(`/instructor/${data.userID}/schedule`)
-   .then((res)=>{
+   .then((res)=>{console.log("sched", res.data);
     if(res.data.status==="success"){
       setSchedule(res.data.data)
     }

@@ -53,8 +53,8 @@ const ClaimDetails= () => {
       <Nav/>
       <SideBar/> 
 
-       <div style={{marginLeft:"25%" }}>
-        <div style={{margin:" 0 0 0 18%" , padding:0,left:0,top:0, position:"absolute"}}>
+       <div style={{marginLeft:"25%" , marginTop:"130Px"}}>
+        <div style={{margin:" 5% 0 0 18%" , padding:0,left:0,top:0, position:"absolute"}}>
        <Link to="/claims"> <GoBack style={{margin:0}} color={'black'}/> </Link>
 </div>
         <SubHeader style={{margin:"50px 0 0 0"}}>Claim overview</SubHeader>

@@ -49,14 +49,22 @@ const JobsDetails = () => {
     console.log(jobDetails);
    
 
-
+    function formatNumberToK(number) {
+      if (number >= 1000) {
+        const suffixes = ['', 'K', 'M', 'B', 'T'];
+        const suffixIndex = Math.floor(Math.log10(number) / 3);
+        const abbreviatedNumber = (number / Math.pow(1000, suffixIndex)).toFixed(0);
+        return abbreviatedNumber + suffixes[suffixIndex];
+      }
+      return number.toString();
+    }
     return (
       <>
       {jobDetails &&
         <>
       
       <Banner color={'#7FF2C5'}>
-       <NavLink to="/jobs/:id"><GoBack color={'white'} to={`/jobs`} state={user}/></NavLink> 
+       <NavLink to={`/jobs`}><GoBack color={'white'} to={`/jobs`} state={user}/></NavLink> 
 <TextWrapper style={{flex:1}} >      
  
     <CourseTitle color={'white'} title={jobDetails.title}/>
@@ -98,7 +106,7 @@ const JobsDetails = () => {
      
      <div>
      <p>Salary:</p>
-     <Header style={{width:"100%"}}>{jobDetails.salary} DA</Header>
+     <Header style={{width:"100%"}}>{jobDetails.salary>=10000 ? formatNumberToK(jobDetails.salary) : jobDetails.salary} DA</Header>
 
      </div>
      <BlackBtn style={{ width:"100%"}} to={`/jobs/${id}/challenge`} state={user}>Apply</BlackBtn>

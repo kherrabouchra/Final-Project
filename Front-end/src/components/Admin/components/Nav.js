@@ -188,7 +188,7 @@ const Nav = () => {
             
             <NotificationList>
               {notifications.length > 0 ? (
-                notifications.map((n, index) => (
+                notifications.map((n, index) => n.type==="hackathon"   (
                  <Link to={'/schedule'}>
                  <Notification key={index} read={n.isSeen} onClick={() => markAsRead(index)}>
                     <NotificationIconWrapper>

@@ -235,7 +235,7 @@ if(k==="logout") handleLogout();
                       <Icon icon={notificationIcon} />
                     </NotificationIconWrapper>
                     {user.role==='instructor'  && 
-                    <NotificationText>{n.title}: {JSON.parse(n.description).name}</NotificationText>}
+                    <NotificationText>{n.title && n.title}: {n.description && JSON.parse(n.description).name}</NotificationText>}
                    
                    {user.role==='developer' &&
                    <NotificationText>{n.title}:</NotificationText>}

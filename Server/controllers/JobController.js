@@ -42,11 +42,12 @@ if (err) {
  const postJob = (req, res) => {
     const stmt =
       'INSERT INTO job_offer set ? ';
-  console.log(req.body);
-    const jobData = req.body;
+ 
+    const jobData = req.body; 
+
     console.log(jobData);
   
-    connection.query(stmt,[jobData], (err, data) => {
+    connection.query(stmt,[jobData], (err, data) => { 
       if (err) 
        return res.json({ status: err });
   

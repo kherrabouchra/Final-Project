@@ -63,7 +63,7 @@ recommendations.</SmallText>
    <div style={{position: 'absolute',top:"3140px" , color:"white", width:"700px", left: "600px" }}>
     <Headline data-aos="slide-left">Earn points and build 
         up your profile.</Headline>
-          <p style={{color:'white',position: 'absolute',top:"400px", fontSize:"48px", marginLeft:'-500px', width:'50vw'}}>Track your daily progress and stay updated with your journey on an interactive dashboard.</p>
+          <p style={{color:'white',position: 'absolute',top:"400px", fontSize:"38px", marginLeft:'-500px', width:'50vw'}}>Track your daily progress and stay updated with your journey on an interactive dashboard.</p>
         <img data-aos="slide-up" style={{ position: 'absolute',top:"200px", zIndex:2000, width:"850px"}} alt="dash" src="../images/dash.png"/>
         <NavBtnLink  onClick={()=>navigate('/login')} style={{ position: 'absolute',top:"840px", marginTop:"20px", fontSize:"large",  padding:'  10px 14px'}}>Get started <Arrow/></NavBtnLink>
         </div>

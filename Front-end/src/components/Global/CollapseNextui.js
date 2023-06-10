@@ -33,7 +33,7 @@ export default function CollapseList({courses, lessons, percentage} ) {
                     <div style={{display: "flex", alignItems:"flex-start", justifyContent:"space-between", flex:1 }}>
                     <div style={{display:"flex", flexDirection:"column", padding:"  16px"}}>
                       <P>current lesson:</P>   
-                                       <Text>{lessons[index].lessonName}</Text>
+                                       <Text>{lessons && lessons[index].lessonName}</Text>
                     
               </div>  <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
                       <CircularProgressWithLabel value={percentage[index]}/>

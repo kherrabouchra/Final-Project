@@ -53,21 +53,22 @@ api.get('/job')
         <JobsList>
           {jobs.map((job) => (
             <JobElement key={job.jobOfferID} className='shadow'>
-              <JobTitle>{job.title}</JobTitle>
               <JobsContainer>
+             <div style={{display:'flex', flexDirection:'column'}}><JobTitle>{job.title}</JobTitle>
+
                 <JobDetails1>
                   <Paragraph>company: {job.company}</Paragraph>
                   <Paragraph>City: {job.city}</Paragraph>
                   <Paragraph>Duration: {job.duration}</Paragraph>
                   <Paragraph>{job.onSite}</Paragraph>
-                </JobDetails1>
+                </JobDetails1></div>
                 <JobDetails2>
-                  <Jobsalary>{job.salary} DA</Jobsalary>
-                  {job.state === 'closed' ? (
+                   {job.state === 'closed' ? (
                     <JobState style={{ color: 'red' }}>{job.state}</JobState>
                   ) : (
-                    <JobState style={{ color: 'green' }}>{job.state}</JobState>
-                  )}
+                    <JobState style={{ color: '#36E171' }}>{job.state}</JobState>
+                  )}<Jobsalary>{job.salary} DA</Jobsalary>
+                 
                   <PurpleBtn style={{ width: "100px" }}>
                     <WhiteLink to={`/jobs/${job.jobOfferID}`} state={user}>See details
                     </WhiteLink>
