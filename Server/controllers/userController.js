@@ -156,14 +156,14 @@ exports.updateUser = (req, res, next) => {
 
 exports.updateDeveloper = (req, res) => {
   const userID = req.params.id;
-  const { password, username, email, country, city, education, work_experience } = req.body;
+  const { password, username, email, country, city, education, work_experience, social_links } = req.body;
 
   if (password === '') {
     const updateQuery =
-    "UPDATE user JOIN developer ON user.userID = developer.developerID SET user.username = ?, user.email = ?, user.country = ?, user.city = ?, developer.education = ?, developer.work_experience = ? WHERE user.userID = ?;";
+    "UPDATE user JOIN developer ON user.userID = developer.developerID SET user.username = ?, user.email = ?, user.country = ?, user.city = ?, developer.education = ?, developer.work_experience = ?, developer.social_links = ? WHERE user.userID = ?;";
 
     // Password field is empty, update the other fields without hashing the password
-    const values = [username, email, country, city, education, work_experience, userID];
+    const values = [username, email, country, city, education, work_experience, social_links, userID];
 
     connection.query(updateQuery, values, (err, result) => {
       if (err) {
@@ -175,7 +175,7 @@ exports.updateDeveloper = (req, res) => {
     });
   } else {
     const updateQuery =
-    "UPDATE user JOIN developer ON user.userID = developer.developerID SET user.password = ?, user.username = ?, user.email = ?, user.country = ?, user.city = ?, developer.education = ?, developer.work_experience = ? WHERE user.userID = ?;";
+    "UPDATE user JOIN developer ON user.userID = developer.developerID SET user.password = ?, user.username = ?, user.email = ?, user.country = ?, user.city = ?, developer.education = ?, developer.work_experience = ?, developer.social_links = ? WHERE user.userID = ?;";
 
     // Password field is not empty, hash the password and update all fields
     bcrypt.hash(password, 10, (err, hash) => {
@@ -183,7 +183,7 @@ exports.updateDeveloper = (req, res) => {
         return res.status(500).json({ error: "Error in hashing password" });
       }
 
-      const values = [hash, username, email, country, city, education, work_experience, userID];
+      const values = [hash, username, email, country, city, education, work_experience, social_links, userID];
 
       connection.query(updateQuery, values, (err, result) => {
         if (err) {

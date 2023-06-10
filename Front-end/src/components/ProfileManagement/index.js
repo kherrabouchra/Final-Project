@@ -78,6 +78,7 @@ const AccountSettings = ({ user, log }) => {
     work_experience: "",
     password: "",
     repeatPassword: "",
+    social_links: ""
   });
 
   console.log(data);
@@ -140,6 +141,7 @@ const AccountSettings = ({ user, log }) => {
         city: data.city, // Set default value to an empty string if null
         education: data.education, // Set default value to an empty string if null
         work_experience: data.work_experience, // Set default value to an empty string if null
+        social_links: data.social_links,
         password: data.password,
       };
       const response = await api.put(`user/dev/${user.userID}`, updatedData);
@@ -176,6 +178,7 @@ const AccountSettings = ({ user, log }) => {
       city: dev.city,
       education: dev.education,
       work_experience: dev.work_experience,
+      social_links: dev.social_links,
       password: "",
       repeatPassword: "",
     });
@@ -258,6 +261,16 @@ const AccountSettings = ({ user, log }) => {
               name="work_experience"
               type="text"
               value={data.work_experience}
+              onChange={handleChange}
+            />
+            <Input
+              bordered
+              fullWidth="true"
+              size="lg"
+              label="Social link (GitHub, Portfolio...)"
+              name="social_links"
+              type="url"
+              value={data.social_links}
               onChange={handleChange}
             />
           </>
