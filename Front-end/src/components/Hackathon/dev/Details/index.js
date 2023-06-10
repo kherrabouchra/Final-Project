@@ -40,11 +40,29 @@ const Hackathon = (data) => {
   const [timeLeft, setTimeLeft] = useState("");
   const [instructor, setInst] = useState("");
   const [register, setRegister] = useState("");
+  const [isRegistered, setIsRegistered] = useState(false);
   const location = useLocation();
 
   const [user, setUser] = useState("");
   const [success, setSuccess] = useState("");
   const navigate = useNavigate();
+
+  const fetchregistration = async () => {
+    try {
+      const response = await api.get(
+        `/hackathons/getRegistration/${user.userID}/${data.data.challengeID}`
+      );
+
+      console.log(response.data.data);
+
+      if (response.data.data) {
+        setIsRegistered(true);
+        console.log(isRegistered);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
     setUser(location.state);
@@ -94,6 +112,7 @@ const Hackathon = (data) => {
     // Update the time left every second
     const timer = setInterval(() => {
       calculateTimeLeft();
+      fetchregistration();
     }, 1000);
     // Clean up the timer when the component is unmounted
     return () => clearInterval(timer);
@@ -130,10 +149,16 @@ const Hackathon = (data) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    /* api.post(`/hackathons/${data.data.challengeID}/register`, {devID: register.userID}) */
+<<<<<<< HEAD
+
     api
-      .post(`/hackathons/${data.data.challengeID}/registerteam`, {
-        developer: register.userID,
+      .post(`/hackathons/${data.data.challengeID}/register`, {
+        devID: register.userID, 
+=======
+    api
+      .post(`/hackathons/${data.data.challengeID}/register`, {
+        devID: register.userID,
+>>>>>>> e4f3d22e4e892f6bd6bf7e2e88112e82fad0c05f
       })
       .then((res) => {
         console.log(res.data);
@@ -166,30 +191,42 @@ const Hackathon = (data) => {
             {data.data.description}
           </TextSub>
         </TextWrapper>
-        <PinkBtn style={{ alignSelf: "center" }} onClick={handler}>
-          Register now
-        </PinkBtn>
+        {timeLeft === "Closed" ? null : (
+          <>
+            {isRegistered ? (
+              <TextSub
+                style={{ color: "white", width: "20%", marginRight: "80px" }}
+              >
+                You already registered in this hackathon!
+              </TextSub>
+            ) : (
+              <PinkBtn style={{ alignSelf: "center" }} onClick={handler}>
+                Register now
+              </PinkBtn>
+            )}
 
-        <div>
-          <Modal
-            closeButton
-            state={user}
-            aria-labelledby="modal-title"
-            open={register}
-            onClose={closeHandler}
-          >
-            <Modal.Header>
-              <SubHeader>Registration</SubHeader>
-            </Modal.Header>
-            <Modal.Body>
-              <p>Are you sure you want to participate in this hackathon?</p>
-            </Modal.Body>
-            <Modal.Footer>
-              <WhiteBtn onClick={closeHandler}>Cancel</WhiteBtn>
-              <BlackBtn onClick={(e) => handleSubmit(e)}>Register</BlackBtn>
-            </Modal.Footer>
-          </Modal>
-        </div>
+            <div>
+              <Modal
+                closeButton
+                state={user}
+                aria-labelledby="modal-title"
+                open={register}
+                onClose={closeHandler}
+              >
+                <Modal.Header>
+                  <SubHeader>Registration</SubHeader>
+                </Modal.Header>
+                <Modal.Body>
+                  <p>Are you sure you want to participate in this hackathon?</p>
+                </Modal.Body>
+                <Modal.Footer>
+                  <WhiteBtn onClick={closeHandler}>Cancel</WhiteBtn>
+                  <BlackBtn onClick={(e) => handleSubmit(e)}>Register</BlackBtn>
+                </Modal.Footer>
+              </Modal>
+            </div>
+          </>
+        )}
       </Banner>
 
       <Container>
@@ -257,7 +294,13 @@ const Hackathon = (data) => {
                     <li>
                       Use your model to generate predictions that match the
                       submission format. Click “Submit” in the sidebar, and then
+<<<<<<< HEAD
+ 
                       “Make new submission”. You're in!
+ 
+=======
+                      “Make new submission”. You’re in!
+>>>>>>> e4f3d22e4e892f6bd6bf7e2e88112e82fad0c05f
                     </li>
                     <li>
                       Bonus: share your work! Click the "+" icon on the
@@ -303,9 +346,30 @@ const Hackathon = (data) => {
                 <p>Prize: </p>
               </div>
             </div>
-            <Link to={`/Compete/hackathon/${data.data.challengeID}/participate`} state={user}>
-              Participate
-            </Link>
+            {isRegistered && (
+              <>
+                <TextSub
+                  style={{
+                    color: "black",
+                    textAlign: "center",
+                    fontWeight: 700,
+                    fontSize: "20px",
+                  }}
+                >
+                  Come back on the day of the hackathon to participate.
+                </TextSub>
+                {timeLeft === 0 && (
+                <BlackBtn>
+                  <Link
+                    to={`/Compete/hackathon/${data.data.challengeID}/participate`}
+                    style={{ color: "white" }}
+                  >
+                    Participate
+                  </Link>
+                </BlackBtn>
+                )}
+              </>
+            )}
           </div>
         </div>
       </Container>

@@ -159,7 +159,7 @@ if (loading) {
         <Route path="/courses/new" element={<CreateCourse />} />
         <Route path="/dashboard/courses/lesson/:id" element={<PrtcptCourse />} />
         <Route path="/Compete/hackathon/:id" element={<HackathonDetails />} />
-        <Route path="/Compete/hackathon/:id/participate" element={<HackathonParticipation />} />
+        <Route path="/Compete/hackathon/:id/participate" element={<HackathonParticipation user={loginStatus.user} log={loginStatus.loggedIn} />} />
         <Route path="/Course-management" element={<AdminCourseManage />} />
         <Route path="/Course-management/learning_path" element={<AdminCreatePath />} />
         <Route path="/Claims" element={<AdminClaims />} />

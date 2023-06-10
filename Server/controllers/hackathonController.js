@@ -114,22 +114,21 @@ exports.register = (req, res) => {
     }) 
 }
 
-exports.registerTeam = async (req, res) => {
-    try {
-        const hackathon = req.params.id;
-        const { developer } = req.body;
-    
-        // Call the stored procedure
-        const [rows] = await connection.promise().query('CALL add_developer_to_team(?, ?)', [developer, hackathon]);
-    
-        res.status(200).json({ message: 'Stored procedure executed successfully.' });
-      } catch (err) {
-        console.error('Error executing stored procedure:', err);
-        res.status(500).json({ status: err.message });
-      }
+exports.getRegistration = (req, res) => {
+    const stmt = 'SELECT * FROM challenge_registration WHERE developer = ? AND hackathon = ?'
+
+    const hackathon = req.params.hackId;
+    const developer = req.params.devId;
+
+    connection.query(stmt, [developer, hackathon], (err, data) => {
+        if (err) return res.status(500).json({ status: err });
+
+        res.status(200).json({data: data[0]});
+        console.log(data[0]);
+        console.log(hackathon)
+        console.log(developer)
+    })
 }
-
-
 
 exports.getAllHackathons = (req, res) => {
     const stmt = 'SELECT * FROM challenge, schedule where challenge.type="hackathon"  and challengeID=challenge ';
@@ -299,3 +298,18 @@ exports.updateSchedule = (req, res) => {
     });
   };
   
+
+  exports.addSubmission = (req, res) => {
+    const stmt = 'INSERT INTO challenge_user (developerID, challengeID, input) VALUES (?, ?, ?)'
+
+    const challengeID = req.params.id;
+    const { developerID, input } = req.body;
+
+    connection.query(stmt, [developerID, challengeID, input], (err, data) => {
+        if (err) return res.status(500).json({ status: err });
+
+        res.status(201).json({ status : 'success',  message: "Submission inserted succesfully" })
+
+        console.log(data)
+    })
+  }

@@ -173,7 +173,20 @@ exports.deleteUser = (req, res, next) => {
     }
   });
 };
+exports.addPoints = (req, res) => {
+  const stmt = "UPDATE developer SET points = (points + ?) WHERE developerID = ?";
 
+  const devID = req.params.id;
+  const points = req.body.points;
+
+  connection.query(stmt, [points, devID], (err, data) => {
+    if (err) return res.status(500).json({ status: err });
+
+    res.status(200).json({ "message": `Added ${points} to ${devID}` });
+
+    console.log(data);
+  });
+ }
 
 exports.getAllInstructors=  (req, res, next)  => {
   connection.query('SELECT * FROM user where role="instructor" ', function (err, data, fields) { 

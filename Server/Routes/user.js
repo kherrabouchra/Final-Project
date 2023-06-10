@@ -11,4 +11,6 @@ router.put('/:id',userController.updateUser )
 router.post('/', userController.createUser)
 router.delete('/:id', userController.deleteUser)
 router.get('/current', userController.getCurrentUser)
+
+router.put('/addPoints/:id', userController.addPoints)
 module.exports = router;

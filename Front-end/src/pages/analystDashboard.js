@@ -15,7 +15,7 @@ const AnalystDashboard = () => {
       
       <GlobalStyles />
       <Nav/>
-      <MenuAnalyst/>
+      <MenuAnalyst/> 
       
       <Main/>
       </ThemeProvider>
