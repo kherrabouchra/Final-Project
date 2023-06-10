@@ -1,5 +1,6 @@
 
 
+const dayjs = require('dayjs');
 
 const connection = require('../db.js');
 
@@ -57,9 +58,17 @@ if (err) {
 
   const postJobChallenge = (req, res) => {
     const stmt =
-      'INSERT INTO challenge_submission set ? ';
+      'INSERT INTO challenge_submission set ?  ';
+const currentDate = dayjs().format('YYYY-MM-DD');
  
-    const jobData = req.body;
+    const jobData = {
+      challenge: req.body.challenge,
+      developer: req.body.developer,
+      input: req.body.input,
+      score:req.body.score,
+      time:req.body.time,
+      date: currentDate
+    };
   
   
     connection.query(stmt,[jobData], (err, data) => {
@@ -85,6 +94,35 @@ if (err) {
     });
   };
 
+  const getCandidates= (req, res) => {
+    const stmt =
+      'select * from challenge_submission ,developer ,job_offer, user where challenge_submission.challenge in (select challengeID from challenge where creator=?) and developer= developerID and developerID = userID and job_offer.challenge=challenge_submission.challenge';
+  
+    const jobData = req.params.id;
+ 
+  
+    connection.query(stmt,[jobData], (err, data) => {
+      if (err) 
+       return res.json({ status: err });
+  
+      res.json({ status:'success',  data:data});
+    });
+  };
+
+  const getCandidateByID= (req, res) => {
+    const stmt =
+      'select * from challenge_submission ,developer ,job_offer, user where  userID=?  and developer= developerID and developerID = userID and job_offer.challenge=challenge_submission.challenge ';
+  
+    const id = req.params.id;
+ 
+  
+    connection.query(stmt,[id], (err, data) => {
+      if (err) 
+       return res.json({ status: err });
+  
+      res.json({ status:'success' , data:data});
+    });
+  };
 
   const getJobChallenges= (req, res) => {
     const stmt =
@@ -147,4 +185,4 @@ const getAllJobsbyid= (req, res) => {
 };
 
 
-module.exports = { postJob ,postJobChallenge, getAllJobs, getAllJobsbyid,getJobById,getJobChallenges};
+module.exports = { postJob ,postJobChallenge, getAllJobs,getCandidates,getCandidateByID, getAllJobsbyid,getJobById,getJobChallenges};

@@ -1,4 +1,4 @@
-import { Dropdown,Popover, Button, Avatar, Text, Grid, User, StyledButton } from "@nextui-org/react";
+import { Dropdown,Popover, Button, Avatar, Text, Grid, User, StyledButton,Modal } from "@nextui-org/react";
 import {  Header, UserIcon } from "./GlobalComponents";
 import { NavLink,Link, useParams, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -10,7 +10,8 @@ import { Icon } from '@iconify/react';
 import searchIcon from '@iconify/icons-mdi-light/magnify';
 import notificationIcon from '@iconify/icons-mdi-light/bell'; 
 import api from "../../api/api";
-import { HorizontalSeparator , P} from "./GlobalComponents";
+import { HorizontalSeparator , P, SubHeader,WhiteBtn, BlackBtn} from "./GlobalComponents";
+import dayjs from "dayjs"; 
 
 const Container = styled.div`
   display: flex;
@@ -215,11 +216,59 @@ if(k==="logout") handleLogout();
    navigate(`/instdash/courses/new/${n}`, {state:user})
   console.log("notif");
   }
+const [open, setOpen]=useState(false) 
+const [interview,setInt]=useState({})
+  const handleLink=(n,d)=>{
+setOpen(n); 
+ api.get(`/job/${d}`).then(
+   (res)=>{
+    console.log(res.data);
+
+  setOpen(res.data.data)
+   }
+  
+  )
+  api.get(`/interview/offer/${n}`).then(
+    (res)=>{
+ console.log(res.data);
+   setInt(res.data.data)
+   console.log(interview);
+    }
+ )} 
+  
+  
+  const closeHandler = () => {
+    
+    console.log("closed");
+  };
+
   return (
     <Grid.Container alignItems="center " gap={1}>
     
     <Grid gap = {4}>
-        
+    <Modal
+                closeButton
+                state={user}
+                aria-labelledby="modal-title"
+                open={open}
+                onClose={closeHandler}
+              >
+                <Modal.Header>
+                  <SubHeader>
+                    Interview 
+                  </SubHeader>
+                </Modal.Header>
+                <Modal.Body>
+                 <img src="../images/interview.png" style={{width:"55%", margin:'auto', marginTop:'-30px' }}/>
+                  <div style={{textAlign:'center', lineHeight:"2rem"}}>
+                  <p>You have been chosen to get interviewed for the second hiring stage of job offer"{open && open.title}".<br/>Please be on time at {dayjs(open.date).format('HH:mm ddd DD/MM/YYYY')} </p>
+               <h4>Link:</h4> <Link>{interview && interview.link}</Link></div>
+                </Modal.Body>
+                <Modal.Footer>
+                  <WhiteBtn onClick={closeHandler}>Cancel</WhiteBtn>
+                  <BlackBtn onClick={(e) => console.log(e)}>Register</BlackBtn>
+                </Modal.Footer>
+              </Modal>
     <NotificationIcon onClick={toggleDropdown}>
         <Icon icon={notificationIcon}  color="white" stroke="10" fontSize={'30px'}/>
         {notificationCount > 0 && <NotificationCount>{notificationCount}</NotificationCount>}
@@ -230,18 +279,25 @@ if(k==="logout") handleLogout();
             <NotificationList>
               {notifications.length > 0 ? (
                 notifications.map((n, index) => (
-                  <Notification onClick={()=>handleCourse(n.content)} key={index} read={n.isSeen} >
+                    <>{user.role==='instructor'  && 
+                      <><Notification onClick={()=>handleCourse(n.content, n.description)} key={index} read={n.isSeen} >
                     <NotificationIconWrapper>
                       <Icon icon={notificationIcon} />
                     </NotificationIconWrapper>
-                    {user.role==='instructor'  && 
-                    <NotificationText>{n.title && n.title}: {n.description && JSON.parse(n.description).name}</NotificationText>}
+                 
+                    <NotificationText>{n.title && n.title}: {n.description && JSON.parse(n.description).name}</NotificationText>
+                    <NotificationDate>{timeAgo(n.date_time)}</NotificationDate>
+                  </Notification></>}
                    
                    {user.role==='developer' &&
-                   <NotificationText>{n.title}:</NotificationText>}
+                   <><Notification onClick={()=>handleLink(n.content)} key={index} read={n.isSeen} >
+                   <NotificationIconWrapper>
+                     <Icon icon={notificationIcon} />
+                   </NotificationIconWrapper>
+                   <NotificationText>{n.title} {n.description}</NotificationText>
                     
                     <NotificationDate>{timeAgo(n.date_time)}</NotificationDate>
-                  </Notification>
+                  </Notification></>}</> 
                 )).reverse()
               ) : (
                 <div style={{ margin: "auto", display: "flex", flexDirection: "column", alignItems: "center" }}>

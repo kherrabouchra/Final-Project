@@ -1,8 +1,14 @@
 import { Collapse, Grid, Text } from "@nextui-org/react";
 import CircularProgressWithLabel from "./CircularProgress";
 import { P, WhiteBtn } from "./GlobalComponents";
+import { useLocation, useNavigate } from "react-router-dom";
 export default function CollapseList({courses, lessons, percentage} ) {
-  
+   const loc= useLocation();
+   const user = loc.state;
+   const navigate=useNavigate();
+   const handleClick=(id)=>{
+    navigate(`/dashboard/courses/lesson/${id}`, {state:user}) 
+   }
   return (
     <Grid.Container gap={4}>
       {/* <Grid>
@@ -26,7 +32,6 @@ export default function CollapseList({courses, lessons, percentage} ) {
 
        {courses && courses.map((course , index)=>{
         const title= course.name;
-        console.log(title);
         return(
               <Collapse  style={{width:"570px"}} key={index}  title={title}  > 
                   
@@ -37,7 +42,7 @@ export default function CollapseList({courses, lessons, percentage} ) {
                     
               </div>  <div style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
                       <CircularProgressWithLabel value={percentage[index]}/>
-                      <WhiteBtn style={{height:"35px", marginTop:"8px"}}>Resume</WhiteBtn>
+                      <WhiteBtn style={{height:"35px", marginTop:"8px"}} onClick={()=>handleClick(lessons[index].id)}>Resume </WhiteBtn>
                       </div>
                       </div>
                         </Collapse> 

@@ -8,6 +8,10 @@ const CreateJob = require ('../controllers/JobController.js')
 
 router.post('/saveinterview', CreateInterview.postInterview);
 router.get('/dev', CreateInterview.getDev);
+router.get('/All/:id', CreateInterview.getInterviews);
+router.get('/offer/:id', CreateInterview.getInterviewLink);
+
+
 
 // =======
 // const express = require ('express')

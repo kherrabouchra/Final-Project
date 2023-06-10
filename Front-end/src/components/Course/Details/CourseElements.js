@@ -179,6 +179,19 @@ export const LessonIcon = () => {
     </>
   );
 };
+
+export const UnlockedIcon =()=>{
+   return(<div className="Lesson-icon"> 
+  <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="19.1604" cy="19.1746" r="16.5" fill="white" stroke="#686868" stroke-width="4"/>
+</svg>
+<VerticalSeparator
+          separator="false"
+          className="iconLine"
+          height="45px"
+        /></div>
+)
+}
 export const CourseCard = ({ details, courses, type, to, state }) => {
   const [quizCount, setQuizCount] = useState({});
   const { id } = useParams();

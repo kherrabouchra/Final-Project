@@ -1,36 +1,58 @@
 const connection = require('../db.js');
 
 const postInterview = async (req, res) => {
-  const { title, jobRole, date, hour, duration, additionalInfo, developerID } = req.body;
+  const { title, jobOffer, date, hour, duration, additionalInfo, developerID , link} = req.body;
   // Check that all required fields are present
-  if (!title || !jobRole || !date || !hour || !duration || !developerID) {
-    return res.status(400).json({ error: req.body });
+  if (!title || !jobOffer || !date || !hour || !duration || !developerID || !link) {
+    return res.json({ error: req.body });
   }
 
-  const values = [title, jobRole, date, hour, duration, additionalInfo, developerID];
+  const values = [title, jobOffer, date, hour, duration, additionalInfo,  link,developerID];
 
 
-    // const result = connection.execute('INSERT INTO interviews ( title, jobRole, date, hour, duration, additionalInfo, developerID) VALUES ( ?, ?, ?, ?, ?, ?, ?)', values);
-    connection.execute('INSERT INTO interviews ( title, jobRole, date, hour, duration, additionalInfo, developerID) VALUES ( ?, ?, ?, ?, ?, ?, ?)', values, (error, result) => {
-      const interview = { id: result.insertId, title, jobRole, date, hour, duration, additionalInfo, developerID };
-      console.log('Interview added to database:', interview);
-      res.sendStatus(201);
+    // const result = connection.execute('INSERT INTO interviews ( title, jobOffer, date, hour, duration, additionalInfo, developerID) VALUES ( ?, ?, ?, ?, ?, ?, ?)', values);
+    connection.execute('INSERT INTO interviews ( title, jobOffer, date, hour, duration, additionalInfo, link,developerID) VALUES ( ?, ?, ?, ?, ?, ?,?, ?)', values, (error, result) => {
+      
       
       if (error) {
         console.error('Error creating interview:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.json({ error: error });
 
       }
+      console.log('Interview added to database:', req.body);
+      res.json({status:"success" })
     });
-
-    // connection.release();
-
 
 
 
  
 };
+const getInterviews= (req, res) => {
+stmt= 'SELECT  * FROM interviews WHERE jobOffer in(select jobOfferID from job_offer where recruiter=?)';
+    
+ 
+    connection.query(stmt,[req.params.id], (err, data) => {
+      if (err) 
+       return res.json({ status: err });
+  
+      res.json({ status:'success',  data:data});
+    })
+  
+}
+    
 
+const getInterviewLink =(req, res) => {
+  stmt= 'SELECT  * FROM interviews WHERE id =?';
+      
+   
+      connection.query(stmt,[req.params.id], (err, data) => {
+        if (err) 
+         return res.json({ status: err });
+    
+        res.json({ status:'success',  data:data[0]});
+      })
+    
+  }
 
 const getDev = (req, res) => {
   connection.query(
@@ -46,4 +68,4 @@ const getDev = (req, res) => {
   );
 }
 
-module.exports = { postInterview, getDev };
+module.exports = { postInterview,getInterviews, getDev , getInterviewLink};

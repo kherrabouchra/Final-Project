@@ -56,9 +56,10 @@ console.log(response.data);
       setLoading(false);
     }
   };
-
   useEffect(() => {
     addType();
+
+    
   }, []);
 
   function handleButton (index, label) {

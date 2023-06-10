@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { GlobalStyles } from '../../components/Admin/styles/global';
 import { lightTheme, darkTheme } from '../../components/Admin/styles/theme';
  
@@ -7,9 +7,11 @@ import { Calendar, Table } from 'antd';
  import styled from 'styled-components';
 import Nav from '../../components/Recruiter/Nav'; 
 import SideBarRec from '../../components/Recruiter/SideBar/SideBar';
-import { P, SubHeader } from '../../components/Global/GlobalComponents';
-import { useLocation } from 'react-router-dom';
+import { P, PinkBtn, SubHeader } from '../../components/Global/GlobalComponents';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Recdash from '../../components/Recruiter/Dashboard';
+import api from '../../api/api';
+import dayjs from 'dayjs';
 const MLProgressTable = styled(Table)`
   margin-top: 2rem;
   width: 100%;
@@ -26,9 +28,48 @@ const MLprogressData = [
 const { Column } = Table;
 
 const CandidatesPage = () => {
-
+    const navigate=useNavigate();
     const loc=useLocation();
     const user = loc.state;
+    const [candidate, setCandidate]=useState([]);
+
+    useEffect(()=>{
+
+      api.get(`/job/${user.userID}/candidate/`)
+    .then((res)=>{
+      if(res.data.status==='success'){
+        console.log(res.data.data);
+        setCandidate(res.data.data)
+      }
+    })
+    
+    },[])
+
+    function format_time(seconds) {
+      let hours = Math.floor(seconds / 3600);
+      let minutes = Math.floor((seconds % 3600) / 60);
+      let remainingSeconds = seconds % 60;
+    
+      let timeString = '';
+      if (hours > 0) {
+        timeString += hours + ' hour' + (hours > 1 ? 's' : '') + ' ';
+      }
+      if (minutes > 0) {
+        timeString += minutes + ' minute' + (minutes > 1 ? 's' : '') + ' ';
+      }
+      if (remainingSeconds > 0) {
+        timeString += remainingSeconds + ' second' + (remainingSeconds > 1 ? 's' : '');
+      }
+    
+      return timeString.trim();
+    }
+    const handleButtonClick=(e,id, job)=>{
+      e.preventDefault()
+      console.log(id);
+      navigate(`/candidates/${id}/interview`, { state: {user: user, job: job} })
+    }
+    
+    
   return (
     <div>
          <ThemeProvider theme={lightTheme}>
@@ -40,10 +81,21 @@ const CandidatesPage = () => {
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div style={{ width: '80%', margin:"50px" }}>
          
-          <MLProgressTable dataSource={MLprogressData}>
-            <Column title="Name" dataIndex="name" key="name" />
-            <Column title="Course" dataIndex="course" key="course" />
-            <Column title="Progress" dataIndex="progress" key="progress" />
+          <MLProgressTable dataSource={candidate}>
+            <Column title="Username" dataIndex="username" key="name" />
+            <Column title="Email" dataIndex="email" key="course" />
+            <Column title="Job offer" dataIndex="title" key="progress" />
+            <Column title="Date" dataIndex="date" key="course"   render={(date) => dayjs(date).format('YYYY-MM-DD')}/>
+
+            <Column title="Score" dataIndex="score" key="progress" />
+            <Column title="Time Record" dataIndex="time" key="progress"      render={(time) => format_time(time)} />
+            <Column
+            title="Action"
+            key="action"
+            render={(text, record) => (
+              <PinkBtn onClick={(e) => handleButtonClick(e,record.userID, record.jobOfferID)}>interview</PinkBtn>
+            )}/>
+
           </MLProgressTable>
         </div>
        

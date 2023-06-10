@@ -36,7 +36,7 @@ export const Course  = ( {id,colorid,name, description, type, inst, points, stat
           </div>
         <Line9 /> 
       <div style={{display:'flex', flexDirection:'column-reverse' , height:"100%",padding:"14px 0", }}>
-         <NavLink style={{textDecoration:"none", color :"blue"  }}   to="/Learn/course">Enroll </NavLink >
+         <NavLink style={{textDecoration:"none", color :"blue"  }}   to="/Learn/courses/lesson/1">Enroll </NavLink >
         
            <div style={{display:'flex', justifyContent:"space-between", width : "100%", flex:1}}>
           <P>Points: </P>          <h3>  {points}</h3></div>

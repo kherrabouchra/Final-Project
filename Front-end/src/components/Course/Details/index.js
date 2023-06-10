@@ -30,7 +30,7 @@ export const CourseDetails = () => {
   const [details, setDetails] = useState([]);
   const [chapters, setChapters] = useState([]);
   const [courses, setCourses] = useState([]);
-  const [enrolled, setEnrolled] = useState(false);
+  const [enrolled, setEnrolled] = useState('');
 
   const [lessons, setLessons] = useState([]);
   const { type, id } = useParams();
@@ -68,7 +68,7 @@ export const CourseDetails = () => {
   };
   const fetchLessons = async () => {
     try {
-      const response = await api.get(`courses/lessons/getByCourse/${id}`);
+      const response = await api.get(`/courses/lessons/getByCourse/${id}`);
       if (response.status === 200) {
         setLessons(response.data);
       }
@@ -79,7 +79,7 @@ export const CourseDetails = () => {
 
   const fetchPathCourses = async () => {
     try {
-      const response = await api.get(`paths/courses/${id}`);
+      const response = await api.get(`/paths/courses/${id}`);
       console.log(response.data);
       
       if (response.data.status === 'success') {
@@ -92,7 +92,7 @@ export const CourseDetails = () => {
 
   const fetchChapters = async () => {
     try {
-      const response = await api.get(`courses/chapters/getAll/${id}`);
+      const response = await api.get(`/courses/chapters/getAll/${id}`);
       if (response.status === 200) {
         setChapters(response.data);
       }
@@ -130,6 +130,20 @@ fetchLessons();
 fetchLessons();
     fetchPathCourses();
     }
+
+
+
+    api.get(`/courses/enrolled/${user.userID}`)
+    .then((res) => {
+      console.log(res.data);
+      if (res.data.status === "success") {
+        setEnrolled(res.data.data);
+
+     console.log(enrolled);
+      }
+    })
+    .catch((err) => console.log(err));
+
    
   }, []);
 
@@ -171,20 +185,21 @@ fetchLessons();
                   </Lesson>
                 ))
               : chapters.map((chapter) => {
-                  return (
-                    <Lesson key={chapter.id}>
-                      <LessonIcon lesson={chapter.id} />
-                      <LessonTitle>{chapter.chapterName}</LessonTitle>
-                    </Lesson>
-                  );
-                })}
+                const isChapterUnlocked = enrolled && enrolled.some((enrollment) => enrollment.currentMaterial === lessons.id);
+                return (
+                  <Lesson key={chapter.id}>
+                    {isChapterUnlocked ? <LessonIcon lesson={chapter.id} /> : <LessonIcon lesson={chapter.id} />}
+                    <LessonTitle>{chapter.chapterName}</LessonTitle>
+                  </Lesson>
+                );
+              })}
 
-            {enrolled && (
+            {/* {enrolled && (
               <WhiteBtn style={{ margin: 0 }} id="enroll">
                 Continue course!
               </WhiteBtn>
-            )}
-            {!enrolled && (
+            )} */}
+            {enrolled && (
               <Link to={`/Dashboard/courses/lesson/${lessons.id}`} state={user}>
                 <WhiteBtn
                   style={{ margin: 0 }}

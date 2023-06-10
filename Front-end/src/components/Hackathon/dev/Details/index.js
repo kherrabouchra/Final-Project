@@ -149,16 +149,9 @@ const Hackathon = (data) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-<<<<<<< HEAD
-
-    api
-      .post(`/hackathons/${data.data.challengeID}/register`, {
-        devID: register.userID, 
-=======
     api
       .post(`/hackathons/${data.data.challengeID}/register`, {
         devID: register.userID,
->>>>>>> e4f3d22e4e892f6bd6bf7e2e88112e82fad0c05f
       })
       .then((res) => {
         console.log(res.data);
@@ -294,13 +287,7 @@ const Hackathon = (data) => {
                     <li>
                       Use your model to generate predictions that match the
                       submission format. Click “Submit” in the sidebar, and then
-<<<<<<< HEAD
- 
-                      “Make new submission”. You're in!
- 
-=======
                       “Make new submission”. You’re in!
->>>>>>> e4f3d22e4e892f6bd6bf7e2e88112e82fad0c05f
                     </li>
                     <li>
                       Bonus: share your work! Click the "+" icon on the

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import api from '../api/api';
-
-import axios from "axios";
-
-
+ import api from '../../api/api';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { PurpleBtn, WhiteBtn ,SubHeader, CheckBox,} from '../Global/GlobalComponents';
+import { MdArrowBack } from 'react-icons/md';
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
@@ -16,7 +15,6 @@ const FormContainer = styled.form`
   border: 1px solid #ccc;
   height: 740px;
   background: #FFFFFF;
-  box-shadow: 0px 4px 27px rgba(0, 0, 0, 0.25);
   border-radius: 32px;
   transform: translateY(150px);
   font-size: 17px;
@@ -28,9 +26,8 @@ const InputGroup = styled.div`
 display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-left: 16px;
+  margin: 0 16px;
   background: #FFFFFF;
-  box-shadow: rgba(0, 0, 0, 0.1);
   border-radius: 10px;
 `;
 
@@ -44,7 +41,6 @@ const Input = styled.input`
   border-radius: 4px;
   background: #FFFFFF;
  
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
  
   max-width: 320px;
@@ -55,7 +51,6 @@ const TextArea = styled.textarea`
   height: 182px;
   background: #FFFFFF;
  
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   display: flex;
   resize: none;
@@ -69,7 +64,8 @@ const Select = styled.select`
 `;
 const ButtonGroup = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items:center;
   gap: 8px;
   
 `;
@@ -89,7 +85,6 @@ top: 94%;
 
 background: #8D8AFD;
 mix-blend-mode: normal;
-box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.26);
 border-radius: 50px;
 color : white;
 `;
@@ -103,7 +98,6 @@ top: calc(50% - 38px/2 + 425px);
 
 background: #202020;
 mix-blend-mode: normal;
-box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.26);
 border-radius: 50px;
 color : white;
 top: 94%;
@@ -120,7 +114,6 @@ top: calc(50% - 38px/2 + 425px);
 
 background: #202020;
 mix-blend-mode: normal;
-box-shadow: 0px 0px 22px rgba(0, 0, 0, 0.26);
 border-radius: 50px;
 color : white;
 top: 94%;
@@ -174,7 +167,8 @@ const Labelb = styled(Label)`
   
 `;
 const AA = styled.div`
-margin-top: -10px;
+margin-top: -30px;
+margin-left:20%;
 `
 const columns = [
     {
@@ -189,52 +183,55 @@ function InterviewForm() {
 
     const [title, setTitle] = useState('');
     const [developerID, setdeveloperID] = useState('');
-    const [jobRole, setJobRole] = useState('');
+    const [jobOffer, setJobOffer] = useState('');
     const [date, setDate] = useState('');
     const [hour, setHour] = useState('');
     const [duration, setDuration] = useState('');
+    const [link, setLink]=useState('');
     const [additionalInfo, setAdditionalInfo] = useState('');
-    
+    const[success, setSuccess]=useState(false);
+    const [candidate, setCandidate]=useState('')
+    const {id}=useParams();
+    const l=useLocation();
+    console.log("state:",l);
+    const user=l.state.user;
+    const job= l.state.job;
+     const [data, setData] = useState({
+            title:'',
+            jobOffer:'',
+            developerID:'',
+            date:'',
+            hour:'',
+            duration:'',
+            additionalInfo:'',
+            link:'',
+           
+        });
     const handleSubmit = (e) => {
         e.preventDefault();
-        const data = {
-            title,
-            jobRole,
-            developerID,
-            date,
-            hour,
-            duration,
-            additionalInfo,
-           
-        };
-      
+        
+console.log(data);
+        api.post('interview/saveinterview',  {title , jobOffer, developerID, date , hour, duration, additionalInfo, link})
+            .then((response) => {console.log(response.data);
+                if(response.data.status==='success'){
 
-        axios.post('http://localhost:5000/interview/saveinterview', data)
-            .then((response) => {
-                alert('Interview added successfully!');
+                console.log('Interview added successfully!');
                 setTitle('');
-                setJobRole('');
+                setJobOffer('');
                 setDate('');
                 setHour('');
                 setDuration('');
                 setAdditionalInfo('');
                 setdeveloperID('');
-              
+                setSuccess(true);
+
+                }
             })
             .catch((error) => {
                 console.error('Error adding interview:', error);
-                alert('Failed to add interview');
             });
     };
-
-    // Use useEffect to handle cleanup when the component unmounts
-    useEffect(() => {
-        const source = axios.CancelToken.source();
-        return () => {
-            source.cancel('Component unmounted');
-        }
-    }, []);
-
+ 
     ////get users
     const [users, setUsers] = useState(null);
 
@@ -242,33 +239,43 @@ function InterviewForm() {
     useEffect(() => {
 
         //console.log(users);
-
-        axios.get('http://localhost:5000/interview/dev')
+       setdeveloperID(id);
+       setJobOffer( job)
+        api.get('/interview/dev')
             .then(res => {
-                setUsers(res.data.users)
+                setUsers(res.data.users) 
                //console.log(res.data.users)
             })
             .catch(err => console.log(err));
+ 
+        api.get(`/job/candidate/${id}`)
+        .then((res)=>{console.log(res.data);
+            if(res.data.status==="success"){
+                console.log(res.data.data);
+                setCandidate(res.data.data)
+            }
+        })
     }, [])
 
 
     const handleReset = () => {
         setTitle('');
         setdeveloperID('');
-        setJobRole('');
+        setJobOffer('');
         setDate('');
         setHour('');
         setDuration('');
         setAdditionalInfo('');
     };
+ 
+    const navigate=useNavigate()
+  const handleCancle=(e)=>{
+    e.preventDefault()
+    navigate(`/candidates`, {state:user})
+  }
 
-    const handleCancel = () => {
-        // TODO: handle cancel action
-    };
-
-
-    return (
-        <AA>
+    return (<>
+    {!success &&     <AA>
             <FormContainer >
                 <Title>Create Interview</Title>
                 <InputGroup>
@@ -281,35 +288,12 @@ function InterviewForm() {
                 </InputGroup>
 
 
-                <InputGroup>
-                    <Label>Candidate name</Label>
-                    <Select value={developerID} onChange={(e) => setdeveloperID(e.target.value)}>
-                        <option value="">-- Select candidate name --</option>
-                        {users &&
-                            users.map((user) => (
-                                <option key={user.userID} value={user.userID}>
-                                    {user.username}
-                                </option>
-                            ))}
-                    </Select>
-                </InputGroup>
+              
 
 
-
-
-
-                <InputGroup>
-                    <Label>Job Role</Label>
-                    <Select value={jobRole} onChange={(e) => setJobRole(e.target.value)}>
-                        <option value="">--Please select a job role--</option>
-                        <option value="Software Engineer">Software Engineer</option>
-                        <option value="Product Manager">Product Manager</option>
-                        <option value="Data Scientist">Data Scientist</option>
-                        <option value="Designer">Designer</option>
-                        <option value="Other">Other</option>
-                    </Select>
-                </InputGroup>
-                <InputGroup>
+ 
+                
+               <div style={{display:'flex', width:"100%"}}><InputGroup>
                     <Label>Date</Label>
                     <Input
                         type="date"
@@ -324,9 +308,8 @@ function InterviewForm() {
                         value={hour}
                         onChange={(e) => setHour(e.target.value)}
                     />
-                </InputGroup>
-                <InputGroup>
-                    <Label>Duration (in minutes)</Label>
+                </InputGroup><InputGroup>
+                    <Label>Duration (minutes)</Label>
                     <Input
                         type="number"
                         min="15"
@@ -334,24 +317,41 @@ function InterviewForm() {
                         value={duration}
                         onChange={(e) => setDuration(e.target.value)}
                     />
+                </InputGroup></div> 
+                <InputGroup>
+                    <Label>Interview Link</Label>
+                    <Input
+                    
+                        value={link}
+                        onChange={(e) => setLink(e.target.value)}
+                    />
                 </InputGroup>
                 <InputGroup>
                     <Label>Additional Information</Label>
-                    <TextArea
+                    <TextArea style={{padding:"20px"}}
                         value={additionalInfo}
                         onChange={(e) => setAdditionalInfo(e.target.value)}
                     />
                 </InputGroup>
 
                 <ButtonGroup>
-                    <SubmitButton type="submit" onClick={handleSubmit}>Submit</SubmitButton>
-                    <ResetButton type="button" onClick={handleReset}>Reset</ResetButton>
-                    <CancelButton type="button" onClick={handleCancel}>Cancel</CancelButton>
+                    <div style={{display:'flex'}}>
+                    <WhiteBtn type="button" onClick={handleReset}>Reset</WhiteBtn>
+                    <WhiteBtn type="button" onClick={handleCancle}>Cancel</WhiteBtn></div>
+                    <PurpleBtn type="submit" onClick={handleSubmit}>Submit</PurpleBtn>
+
                 </ButtonGroup>
 
             </FormContainer>
-        </AA>
-    );
+        </AA>}
+ {success && <AA>
+    <FormContainer><div style={{display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', padding:"80px"}}>
+       
+       <SubHeader>Job interview created successfully !</SubHeader>
+       <CheckBox></CheckBox>
+       <WhiteBtn onClick={handleCancle}> <MdArrowBack/> Go back to job offers</WhiteBtn>
+       </div> </FormContainer></AA> 
+       } </>  );
 }
 
 export default InterviewForm;

@@ -57,6 +57,7 @@ import HackathonParticipation from './pages/Developer/HackathonParticipation';
 import JobsDetailsPage from './pages/Developer/JobsDetailsPage';
 import JobChallenge from './components/Job/JobsDetails/JobChallenge';
 import AnalystDashboard from './pages/analystDashboard';
+import CreateInterview from './pages/Recruiter/createInterview';
 
 function App( ) {
   const [loginStatus, setLoginStatus]=useState('')
@@ -173,6 +174,8 @@ if (loading) {
         <Route path='/joboffers/new' element={<Createjoboffer/>}/>
          <Route path='analyst' element={<AnalystDashboard/>}/>
         <Route path='/candidates' element={<CandidatesPage/>}/>
+        <Route path='/candidates/:id/interview' element={<CreateInterview/>}/>
+
 
         <Route path="/DashboardRedirect" element={<DashboardPage user={loginStatus.user} log={loginStatus.loggedIn}/>} />
         <Route exact path="/" element={<DashboardPage user={loginStatus.user} log={loginStatus.loggedIn} />} />

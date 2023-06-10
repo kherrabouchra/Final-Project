@@ -3,6 +3,9 @@ const router = express.Router();
 const job = require('../controllers/JobController.js');
  
 router.get('/:id', job.getAllJobsbyid); 
+router.get('/:id/candidate', job.getCandidates); 
+router.get('/candidate/:id', job.getCandidateByID); 
+
 router.get('/', job.getAllJobs)
 router.get('/get/:id', job.getJobById)
 router.get('/get/:id/challenge', job.getJobChallenges)

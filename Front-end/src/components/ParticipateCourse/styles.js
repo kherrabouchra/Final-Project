@@ -12,7 +12,12 @@ export const LessonTitle = styled.h2`
   font-size: 35px;
   margin: 0 0 15px 8px;
 `;
-
+export const  Ticket=()=>{
+  return( <svg style={{margin:'auto', zIndex:'-200'}} width="464" height="211" viewBox="0 0 564 311" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.802246" y="0.0518799" width="522.893" height="309.977" fill="#F989E6"/>
+  <ellipse cx="523.696" cy="155.04" rx="39.7903" ry="38.0849" fill="white"/>
+  </svg>)
+}
 export const LessonParagraph = styled.p`
   font-size: 1.15rem;
   margin: 0 10px 15px 10px;

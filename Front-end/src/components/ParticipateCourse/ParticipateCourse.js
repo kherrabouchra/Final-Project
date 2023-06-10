@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import {
   Banner,
   Container,
+  PinkBtn,
   TextSub,
   WhiteBtn,
-} from "../Global/GlobalComponents";
+} from "../Global/GlobalComponents"; 
 import { CourseTitle, TextWrapper } from "../Course/Details/CourseElements";
 import { FilterBtnWrapper } from "../Course/Courses/LearnElements";
 import {
@@ -21,6 +22,15 @@ import CodeEditor from "./CodeEditor";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import api from "../../api/api";
 import Quiz from "./Quiz";
+import { MdArrowCircleRight } from "react-icons/md";
+
+import { Group, Button } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
+
+
+
+ 
+
 
 const ParticipateCourse = ({ log }) => {
   const [lesson, setLesson] = useState({});
@@ -55,7 +65,11 @@ const ParticipateCourse = ({ log }) => {
         devID: user.userID,
         points: lesson.points,
       };
-
+      
+      notifications.show({
+        title: `+ ${lesson.points} XP POINTS`,
+        message: ' Great keep it up !' , color:'grape'
+      })
       const pointsAdded = await api.put(`user/addPoints/${user.userID}`, data);
 
       console.log(pointsAdded.data);
@@ -69,6 +83,7 @@ const ParticipateCourse = ({ log }) => {
 
     if (correct) {
       addPoints();
+
     }
   };
 
@@ -85,7 +100,10 @@ const ParticipateCourse = ({ log }) => {
   console.log(lesson);
 
   const handleClick = () => {
+    setTimeout(() => {
     navigate(`/Dashboard/courses/lesson/${parseInt(id) + 1}`, { state: user });
+      
+    }, 700);
   };
 
   useEffect(() => {
@@ -98,17 +116,20 @@ const ParticipateCourse = ({ log }) => {
     <div>
       <Banner color="black" style={{ height: "270px" }}>
         <TextWrapper>
-          <CourseTitle color={"white"} title={lesson.chapterName} />
+       <LessonTitle style={{color:"#F989E6", fontWeight:300}}>{lesson.chapterName}</LessonTitle>
         </TextWrapper>
       </Banner>
       {lesson.videoUrl && !lesson.quizID && !lesson.notebookURL && (
-        <Container>
-          <LessonTitle>{lesson.lessonName}</LessonTitle>
+        <Container style={{padding:"30px", background:'black', color:'white', borderRadius:0}}>
+             <CourseTitle style={{marginLeft:"100px", marginTop:'-80px'}} color={"white"} title={lesson.lessonName} />
+             <Group position="center">
+       
+    </Group>
           <CloudinaryVideoContainer cloudName="dub9jmuyb">
             <VideoWndw
               publicId={lesson.videoUrl}
               controls
-              width="75%"
+              width="100%"
               height="auto"
               style={{ margin: "15px 23%", width: "60%" }}
             />
@@ -119,10 +140,9 @@ const ParticipateCourse = ({ log }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Link
-              to={`/Dashboard/courses/lesson/${parseInt(id) + 1}`}
+            <Link 
               onClick={handleClick}
-              state={user}
+            
             >
               <NextButton onClick={addPoints}>Got it!</NextButton>
             </Link>
@@ -134,11 +154,12 @@ const ParticipateCourse = ({ log }) => {
           <div
             style={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "space-between", alignItems:"center", flexDirection:'column', width:"100vw"
             }}
           >
             <QuizContainer>
-              <LessonTitle>{lesson.lessonName}</LessonTitle>
+            <CourseTitle style={{ width:'100vw', margin: "0 0 30px -250px ", padding:0}} color={"black"} title={lesson.lessonName} />
+
               <Quiz
                 lesson={lesson}
                 correct={correct}
@@ -151,7 +172,7 @@ const ParticipateCourse = ({ log }) => {
                 user={user}
               />
             </QuizContainer>
-            <CodeEditor lesson={lesson} />
+           {lesson.notebookURL &&  <CodeEditor lesson={lesson} />}
           </div>
           <div
             style={{
@@ -270,12 +291,10 @@ const ParticipateCourse = ({ log }) => {
               justifyContent: "flex-end",
             }}
           >
-            <Link
-              to={`/Dashboard/courses/lesson/${parseInt(id) + 1}`}
-              onClick={handleClick}
-              state={user}
+            <Link 
+              onClick={handleClick} 
             >
-              <NextButton onClick={addPoints}>Got it!</NextButton>
+              <PinkBtn onClick={addPoints}>Got it <MdArrowCircleRight/></PinkBtn>
             </Link>
           </div>
         </Container>
