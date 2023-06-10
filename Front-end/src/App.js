@@ -153,7 +153,7 @@ if (loading) {
         <Route path="/instdash/courses/update/:id" element={<UpdateCoursePage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/Schedule" element={<Schedule />} />
-        <Route path="/account" element={<ManageAccountPage />} />
+        <Route path="/account" element={<ManageAccountPage user={loginStatus.user} log={loginStatus.loggedIn}/>} />
         <Route path="/hackathons" element={<HackathonManagementPage />} />
         <Route path="/hackathons/new" element={<Createhackathon />} />
         <Route path="/courses/new" element={<CreateCourse />} />
