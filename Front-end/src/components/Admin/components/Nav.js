@@ -126,7 +126,7 @@ const Nav = () => {
 
   useEffect(()=>{
 
-    api.get('/notifications/90')
+    api.get('/notifications/99')
   .then(res => {
       if(res.data.status === 'success') {
        setNotifications(res.data.data);
@@ -188,7 +188,7 @@ const Nav = () => {
             
             <NotificationList>
               {notifications.length > 0 ? (
-                notifications.map((n, index) => n.type==="hackathon"   (
+                notifications.map((n, index) =>    (
                  <Link to={'/schedule'}>
                  <Notification key={index} read={n.isSeen} onClick={() => markAsRead(index)}>
                     <NotificationIconWrapper>

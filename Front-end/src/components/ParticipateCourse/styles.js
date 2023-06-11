@@ -5,7 +5,7 @@ import { CloudinaryContext, Video } from "cloudinary-react";
 
 export const QuizContainer = styled.section`
   margin: 10px;
-  width: 50%;
+  width: 60vw;
 `;
 
 export const LessonTitle = styled.h2`
@@ -20,6 +20,7 @@ export const  Ticket=()=>{
 }
 export const LessonParagraph = styled.p`
   font-size: 1.15rem;
+  line-height:1.4rem;
   margin: 0 10px 15px 10px;
 `;
 

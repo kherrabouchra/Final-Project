@@ -26,7 +26,8 @@ const Quiz = ({
   const [error,setError]=useState();
 
  const loc=useLocation();
- const user = loc.state;
+ const user = loc.state.user;
+ const course= loc.state.course;
   return (
     <>
       <QuizElement>Exercise</QuizElement>
@@ -58,7 +59,7 @@ const Quiz = ({
       <RadioInput
         type="radio"
         id="option_b"
-        name="question" color={submitted && correctOptionLabel ? "success" : ''}
+        name="question"  
 
         value="b"
         onChange={() => handleCorrectAnswer("b")}
@@ -69,7 +70,7 @@ const Quiz = ({
       <RadioInput
         type="radio"
         id="option_c"
-        name="question" color={submitted && correctOptionLabel ? "success" : ''}
+        name="question" 
 
         value="c"
         onChange={() => handleCorrectAnswer("c")}
@@ -80,7 +81,7 @@ const Quiz = ({
       <RadioInput
         type="radio"
         id="option_d"
-        name="question" color={submitted && correctOptionLabel ? "success" : ''}
+        name="question"  
 
         value="d" 
         onChange={() => handleCorrectAnswer("d")}
@@ -98,7 +99,7 @@ const Quiz = ({
 
         </div> 
          
-          <Link style={{color:'white',margin:' 20px 0 0 84px', fontSize:'16px'}} to={`/Dashboard/courses/lesson/${parseInt(id) + 1}`} state={user}>Next <MdArrowForward/></Link>
+          <Link style={{color:'white',margin:' 20px 0 0 84px', fontSize:'16px'}} to={`/Dashboard/courses/lesson/${parseInt(id) + 1}`} state={{user:user, course:course}}>Next <MdArrowForward/></Link>
         </div>
       )}
 
@@ -113,7 +114,7 @@ const Quiz = ({
  
          </div> 
           
-           <Link style={{color:'white',margin:' 20px 0 0 84px', fontSize:'16px'}} to={`/Dashboard/courses/lesson/${parseInt(id) + 1}`} state={user}>Next <MdArrowForward/></Link>
+           <Link style={{color:'white',margin:' 20px 0 0 84px', fontSize:'16px'}} to={`/Dashboard/courses/lesson/${parseInt(id) + 1}`} state={{user:user, course:course}}>Next <MdArrowForward/></Link>
          </div>
       )}
     </>

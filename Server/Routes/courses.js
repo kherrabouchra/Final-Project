@@ -7,7 +7,9 @@ router.get('/', CourseController.getAllCourses);
 router.get('/getAll/:id', CourseController.getAllCoursesByInst);
 router.get('/:id', CourseController.getCourse);
 router.get('/enrolled/:id', CourseController.getEnrolledCourses);
-// router.post('/enrolled/', CourseController.getEnrolledCourses);
+router.post('/enrolled/', CourseController.enrollCourse);
+router.put('/enrolled/', CourseController.setCurrentLesson);
+
 
 router.put('/:id', CourseController.updateCourse);
 router.delete('/:id', CourseController.deleteCourse);

@@ -125,7 +125,7 @@ const Demo = (props) => {const capitalize = (str) => {
   const [notifications, setNotifications]= useState('');
   const [instructors, setInstructors]= useState('');
   useEffect(()=>{
-    api.get('/notifications/90')
+    api.get('/notifications/99')
     .then(res => {
         if(res.data.status === 'success') {
          setNotifications(res.data.data) ;

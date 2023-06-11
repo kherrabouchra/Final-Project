@@ -37,8 +37,7 @@ export const CourseDetails = () => {
 
   const location=useLocation();
   const user= location.state;
-
-  console.log(user);
+console.log(location.state);
   /* const { type, name } = useParams();
   const location = useLocation();
   const id = location.state.id;
@@ -103,19 +102,7 @@ export const CourseDetails = () => {
 
 
   const handleEnroll = () => {
-    const enrollData = {
-      developer: 88,
-      course: 1,
-    };
-    api
-      .post("/dashboard/courses/create", enrollData)
-      .then((response) => {
-        console.log(response);
-        setEnrolled(true);
-      })
-      .then((error) => {
-        console.log(error);
-      });
+    
   };
 
   useEffect(() => {
@@ -145,7 +132,7 @@ fetchLessons();
     .catch((err) => console.log(err));
 
    
-  }, []);
+  }, [user]);
 
   console.log( lessons);
   const colors = ["#4435EE ", "#6249f1", "#8D64F5", "#C78AFB", "#F198FF"];
@@ -200,7 +187,7 @@ fetchLessons();
               </WhiteBtn>
             )} */}
             {enrolled && (
-              <Link to={`/Dashboard/courses/lesson/${lessons.id}`} state={user}>
+              <Link to={`/Dashboard/courses/lesson/${lessons.id}`} state={{user:user, course:details}}>
                 <WhiteBtn
                   style={{ margin: 0 }}
                   onClick={handleEnroll}

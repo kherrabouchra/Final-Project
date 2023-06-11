@@ -195,6 +195,33 @@ const getAllLessons = (req, res) => {
   });
 };
 
+const enrollCourse = (req, res) => {
+  const stmt =
+    "insert into enrolled_course set ? ";
+
+  const d = req.body;
+
+  connection.query(stmt, d, (err, data) => {
+    if (err) return res.json({ status: err });
+
+    res.json({status:"success"});
+    console.log(data);
+  });
+};
+
+const setCurrentLesson= (req, res) => {
+  const stmt =
+    "update   enrolled_course set currentMaterial= ? where developer =? and course=? ";
+
+  const d = req.body;
+
+  connection.query(stmt, d, (err, data) => {
+    if (err) return res.json({ status: err });
+
+    res.json({status:"success"});
+    console.log(data);
+  });
+};
 
 const getAllLessonsBycourse = (req, res) => {
   const stmt =
@@ -203,7 +230,7 @@ const getAllLessonsBycourse = (req, res) => {
   const courseID = req.params.id;
    const id=req.params.id;
   connection.query(stmt, [courseID,id], (err, data) => {
-    if (err) return res.status(500).json({ status: err });
+    if (err) return res.json({ status: err });
 
     /* if (data.length === 0) return res.status(400).json({ "message": `Course ${id} not found`}); */
 
@@ -327,7 +354,7 @@ const updateQuiz = (req, res) => {
 };
 
 module.exports = {
-  createCourse, 
+  createCourse, enrollCourse,setCurrentLesson,
   getAllCoursesByInst,
   getAllCourses, getCourseLesson,
   getCourse,getEnrolledCourses, 

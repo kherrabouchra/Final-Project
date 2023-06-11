@@ -22,7 +22,7 @@ import CodeEditor from "./CodeEditor";
 import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import api from "../../api/api";
 import Quiz from "./Quiz";
-import { MdArrowCircleRight } from "react-icons/md";
+import { MdArrowCircleRight, MdArrowForward } from "react-icons/md";
 
 import { Group, Button } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
@@ -40,8 +40,15 @@ const ParticipateCourse = ({ log }) => {
   const [correct, setCorrect] = useState(false);
   const [showCorrectAnswer, setShowCorrectAnswer] = useState(false);
   const [correctOptionLabel, setCorrectOptionLabel] = useState("");
+  const[all,setAll]=useState([]);
   const loc = useLocation();
-  const user = loc.state;
+  const user = loc.state.user;
+  const course= loc.state.course;
+console.log(user, course, loc.state);
+
+
+
+
 
   const handleCorrectAnswer = (selectedOption) => {
     if (lesson.correct_answer === selectedOption) {
@@ -65,10 +72,10 @@ const ParticipateCourse = ({ log }) => {
         devID: user.userID,
         points: lesson.points,
       };
-      
+       
       notifications.show({
         title: `+ ${lesson.points} XP POINTS`,
-        message: ' Great keep it up !' , color:'grape'
+        message: ' Great, keep it up !' , color:'grape'
       })
       const pointsAdded = await api.put(`user/addPoints/${user.userID}`, data);
 
@@ -78,7 +85,8 @@ const ParticipateCourse = ({ log }) => {
     }
   };
 
-  const handleSubmission = () => {
+  const handleSubmission = (e) => {
+    e.preventDefault()
     setSubmitted(true);
 
     if (correct) {
@@ -87,7 +95,17 @@ const ParticipateCourse = ({ log }) => {
     }
   };
 
+  const handleClick = (e) => {
+    e.preventDefault()
+   
+    setTimeout(() => {
+    navigate(`/Dashboard/courses/lesson/${parseInt(id) + 1}`, { state:{ user:user , course:course}});
+      
+    }, 700);
+  }; 
+
   const fetchLesson = async () => {
+
     try {
       const response = await api.get(`/courses/lessons/get/${id}`);
       if (response.status === 200) {
@@ -96,32 +114,61 @@ const ParticipateCourse = ({ log }) => {
     } catch (err) {
       console.log(`Error: ${err.message}`);
     }
-  };
-  console.log(lesson);
+  }; 
 
-  const handleClick = () => {
-    setTimeout(() => {
-    navigate(`/Dashboard/courses/lesson/${parseInt(id) + 1}`, { state: user });
-      
-    }, 700);
-  };
 
+
+  
   useEffect(() => {
-    fetchLesson();
-  }, []);
+   
+ api.get(`/courses/lessons/getAll/course/${course.courseID}`)
+    .then((res)=>{console.log(res.data);
+      setAll(res.data.data)
+     
+      
+    }).catch((err=>console.log(err)))
 
+ 
+   
+
+
+ 
+    fetchLesson();
+  }, [ ]);
+
+  useEffect(()=>{
+    if(all.length>0){
+
+      console.log( id ,all[0].id);
+                if ( id == all[0]?.id){
+                  api.post('/courses/enrolled', {developer:user.userID, course:course.courseID})
+                  .then((res)=>{console.log(res.data);
+                    if(res.data.status==='success'){
+                      console.log('enrolled !!');
+                    }
+                  }).catch((err)=>console.log(err))
+                  
+                  
+                }
+      
+            }
+  },[all])
+ 
   let bannercolor =
     "linear-gradient(299.49deg, #000000 12.93%, #4335EE 27.28%, #C78AFB 69.39%)";
   return (
     <div>
       <Banner color="black" style={{ height: "270px" }}>
         <TextWrapper>
-       <LessonTitle style={{color:"#F989E6", fontWeight:300}}>{lesson.chapterName}</LessonTitle>
+       <div style={{color:"#F989E6" ,display:'flex'}}>
+       <MdArrowForward size={36}/><LessonTitle style={{ fontWeight:300,}} >{lesson.chapterName}</LessonTitle>
+
+        </div>
         </TextWrapper>
       </Banner>
       {lesson.videoUrl && !lesson.quizID && !lesson.notebookURL && (
         <Container style={{padding:"30px", background:'black', color:'white', borderRadius:0}}>
-             <CourseTitle style={{marginLeft:"100px", marginTop:'-80px'}} color={"white"} title={lesson.lessonName} />
+             <CourseTitle style={{marginLeft:"100px",fontSize:"60px", marginTop:'-80px'}} color={"white"} title={lesson.lessonName} />
              <Group position="center">
        
     </Group>
@@ -141,10 +188,10 @@ const ParticipateCourse = ({ log }) => {
             }}
           >
             <Link 
-              onClick={handleClick}
+              onClick={(e)=>handleClick(e)}
             
             >
-              <NextButton onClick={addPoints}>Got it!</NextButton>
+              <NextButton onClick={addPoints}>Got it<MdArrowForward/></NextButton>
             </Link>
           </div>
         </Container>
@@ -158,7 +205,7 @@ const ParticipateCourse = ({ log }) => {
             }}
           >
             <QuizContainer>
-            <CourseTitle style={{ width:'100vw', margin: "0 0 30px -250px ", padding:0}} color={"black"} title={lesson.lessonName} />
+            <CourseTitle style={{ width:'70vw', margin: "0 40px 30px -250px ", fontSize:"60px", padding:0}} color={"black"} title={lesson.lessonName} />
 
               <Quiz
                 lesson={lesson}
@@ -181,9 +228,9 @@ const ParticipateCourse = ({ log }) => {
             }}
           >
             {!submitted && (
-              <NextButton onClick={() => handleSubmission()}>
+              <WhiteBtn onClick={(e) => handleSubmission(e)}>
                 Submit answer
-              </NextButton>
+              </WhiteBtn>
             )}
           </div>
         </Container>
@@ -292,7 +339,7 @@ const ParticipateCourse = ({ log }) => {
             }}
           >
             <Link 
-              onClick={handleClick} 
+              onClick={(e)=>handleClick(e)} 
             >
               <PinkBtn onClick={addPoints}>Got it <MdArrowCircleRight/></PinkBtn>
             </Link>

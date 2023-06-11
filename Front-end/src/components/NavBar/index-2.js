@@ -27,7 +27,7 @@ console.log(user);
             <NavLinks to={"/Learn"}  state= {user}  activeClassName="active"> Learn</NavLinks>
           </NavItem> 
        <Navlogo to={""}   state= {user}>
-        <img style={{width:'3rem', height:'3rem',padding:'0'  }} src='../images/logo.png'/> 
+        <img style={{width:'3rem', height:'3rem',padding:'0'  }} src='../images/logo.png' /> 
        </Navlogo>
           <NavItem>
           <NavLinks to={"/Compete"}state= {user}  activeClassName="active"> Compete </NavLinks>
