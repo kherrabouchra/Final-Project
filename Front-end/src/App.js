@@ -57,6 +57,7 @@ import HackathonParticipation from './pages/Developer/HackathonParticipation';
 import JobsDetailsPage from './pages/Developer/JobsDetailsPage';
 import JobChallenge from './components/Job/JobsDetails/JobChallenge';
 import AnalystDashboard from './pages/analystDashboard';
+import AnalyticForm from './components/Analyst/analytics';
 
 function App( ) {
   const [loginStatus, setLoginStatus]=useState('')
@@ -171,8 +172,9 @@ if (loading) {
         <Route path='/recdashboard' element={<RecruiterDashboard/>}/>
         <Route path='/joboffers' element={<JobOfferManage/>}/>
         <Route path='/joboffers/new' element={<Createjoboffer/>}/>
-         <Route path='analyst' element={<AnalystDashboard/>}/>
         <Route path='/candidates' element={<CandidatesPage/>}/>
+        <Route exact path="/analyst" element={<AnalystDashboard/>}/>
+        <Route path="/Analytic" element={<AnalyticForm/>} />
 
         <Route path="/DashboardRedirect" element={<DashboardPage user={loginStatus.user} log={loginStatus.loggedIn}/>} />
         <Route exact path="/" element={<DashboardPage user={loginStatus.user} log={loginStatus.loggedIn} />} />
