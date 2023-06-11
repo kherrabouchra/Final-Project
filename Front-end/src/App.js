@@ -57,12 +57,12 @@ import HackathonParticipation from './pages/Developer/HackathonParticipation';
 import JobsDetailsPage from './pages/Developer/JobsDetailsPage';
 import JobChallenge from './components/Job/JobsDetails/JobChallenge';
 import AnalystDashboard from './pages/analystDashboard';
-<<<<<<< HEAD
+ 
 import CreateInterview from './pages/Recruiter/createInterview';
-=======
+ 
 import AnalyticForm from './components/Analyst/analytics';
->>>>>>> d54ba3644605abb74b8ffe074877b02af1190332
-
+  
+ 
 function App( ) {
   const [loginStatus, setLoginStatus]=useState('')
   api.defaults.withCredentials = true;
@@ -177,14 +177,17 @@ if (loading) {
         <Route path='/joboffers' element={<JobOfferManage/>}/>
         <Route path='/joboffers/new' element={<Createjoboffer/>}/>
         <Route path='/candidates' element={<CandidatesPage/>}/>
-<<<<<<< HEAD
+ 
         <Route path='/candidates/:id/interview' element={<CreateInterview/>}/>
 
-=======
+ 
         <Route exact path="/analyst" element={<AnalystDashboard/>}/>
         <Route path="/Analytic" element={<AnalyticForm/>} />
->>>>>>> d54ba3644605abb74b8ffe074877b02af1190332
-
+ 
+ 
+        <Route exact path="/analyst" element={<AnalystDashboard/>}/>
+        <Route path="/Analytic" element={<AnalyticForm/>} />
+ 
         <Route path="/DashboardRedirect" element={<DashboardPage user={loginStatus.user} log={loginStatus.loggedIn}/>} />
         <Route exact path="/" element={<DashboardPage user={loginStatus.user} log={loginStatus.loggedIn} />} />
         

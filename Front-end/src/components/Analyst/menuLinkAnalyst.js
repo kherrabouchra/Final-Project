@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Container = styled.div`
   
-  width: 20%;
+  width: 16%;
   height: 50px; 
   cursor: pointer;
   padding-left: 1rem;
@@ -11,7 +11,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  transition: 0.2s all ease-in-out;
+  transition: 1s all ease-in-out;
  
   
 `;
@@ -20,14 +20,16 @@ const Title = styled.h1`
   font-size: 0.9rem;
   font-weight: 20;
   color: gray;
-  padding: 0.9rem;
+  padding: 0.9rem 3rem;
+  margin-left:-36px;
+  transition: 1s all ease-in-out;
   &:hover { 
     color : black;
-    background-color:  red;
-    border-radius: 30px 0 0 30px;
+    background-color:  #F989F5;
+    border-radius:  0 30px 30px 0;
  
-    width: 10%;
-  transition: 0.2s all ease-in-out;
+    width: 100%;
+  transition: 1s all ease-in-out;
    
     height: 50px;}
 `;

@@ -24,11 +24,12 @@ import axios from "axios";
 const { Column } = Table;
 
 const Container = styled.div`
-  width: auto;
-  margin-left: 16rem;
+ 
+  margin-left: 13rem;
+ margin-top:-60px;
   position: relative;
   padding: 0 4rem;
-  display: flex;
+  display: flex; 
   flex-direction: column;
   height: 100%;
 `;
@@ -37,8 +38,7 @@ const TopBar = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  height: 5rem;
-  padding: 1rem;
+ 
   background-color: ${({ theme }) => theme.colorGrayLight};
 `;
 
@@ -270,7 +270,7 @@ const Main = (props) => {
  <SubHeader style={{margin:"40px 110px"}}>{users}</SubHeader> */}
         <AnalyticsCard className="shadow">
           <h3 style={{ paddingLeft: "4%", marginBottom: "20px" }}>
-            Claims Development
+            Claims  
           </h3>
           <LineChart
             width={297}
@@ -308,7 +308,7 @@ const Main = (props) => {
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <UsersCard className="shadow">
           <h2 style={{ paddingLeft: "4%", marginBottom: "20px" }}>
-            Users Banned Development
+          Banned Users 
           </h2>
           <LineChart
             width={600}
@@ -330,7 +330,7 @@ const Main = (props) => {
           </LineChart>
         </UsersCard>
         <div style={{ width: "35%" }}>
-          <h3>Cours Chart</h3>
+          <h3>Course Chart</h3>
           <BarChart width={430} height={380} data={courseMounth}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />

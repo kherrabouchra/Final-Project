@@ -8,6 +8,7 @@ router.get('/', userController.getUsers)
 router.get('/dev/streak/:id', userController.getStreak)
 
 router.put('/:id',userController.updateUser )
+router.put('/dev/:id',userController.updateDeveloper)
 router.post('/', userController.createUser)
 router.delete('/:id', userController.deleteUser)
 router.get('/current', userController.getCurrentUser)

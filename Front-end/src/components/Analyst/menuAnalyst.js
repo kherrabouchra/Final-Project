@@ -6,8 +6,19 @@ import MenuLink from './menuLinkAnalyst';
 
 
 const Container = styled.div`
-  margin-top: 2rem;
-  width: 100%;
+ 
+  
+width: 100%;
+height: 50px; 
+cursor: pointer;
+padding-left: 1rem;
+ margin-top:3rem;
+display: flex;
+flex-direction: column;
+align-items: flex-start;
+transition: 0.2s all ease-in-out;
+
+
 `;
 
 const MenuAnalyst = () => {
@@ -28,6 +39,7 @@ const MenuAnalyst = () => {
 
   return (
     <Container>
+      <img style={{width:'5rem', height:'5rem',marginLeft:'26px'  }} src='../images/logo2.png'/>
       <MenuLink
         to="/analystDAsh"
         title="Dashboard"

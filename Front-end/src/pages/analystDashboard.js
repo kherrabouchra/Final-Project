@@ -4,6 +4,7 @@ import { GlobalStyles } from "../components/Admin/styles/global";
 import { lightTheme, darkTheme } from "../components/Admin/styles/theme";
 import Nav from "../components/Analyst/Nav";
 import Main from "../components/Analyst/Main";
+import MenuAnalyst from "../components/Analyst/menuAnalyst";
 
 const AnalystDashboard = () => {
   
@@ -12,8 +13,7 @@ const AnalystDashboard = () => {
       <ThemeProvider theme={lightTheme}>
         <GlobalStyles />
 
-        <Nav />
-
+     <MenuAnalyst/>
         <Main />
       </ThemeProvider>
     </div>
